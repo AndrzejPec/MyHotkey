@@ -118,6 +118,19 @@ EHK.keyConfigs = {
     }
 }
 
+TBC.keyConfigs = {
+    putTobaccoInLip = {
+        displayName = "Put a snus/chew in lip",
+        action = TBC.putTobaccoInLip,
+        keyCode = Keyboard.KEY_NONE
+    },
+    smokeTobacco = {
+        displayName = "Smoke tobacco",
+        action = TBC.smokeTobacco,
+        keyCode = Keyboard.KEY_NONE
+    }
+}
+
 local mybind = {}
 mybind.value = "[eggonsHotkeys]"
 table.insert(keyBinding, mybind)
