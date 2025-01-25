@@ -34,40 +34,6 @@ function getFirstItem(dictionary, inv, smokingItemType)
     return output
 end
 
-
-TBC.smokeTobaccoWithSelected = function(item, inv)
-    local player = getPlayer()
-    local inv = player:getInventory()
-    if not item then
-        print("[ERROR] Nie wybrano przedmiotu do palenia!")
-        return
-    end
-    if not inv then
-        print("[ERROR] Inwentarz (inv) jest nil!")
-        return
-    end
-
-    local fireSource = getFirstItem(EHK.fireSources, inv)
-    if not fireSource then
-        dialogueNo = ZombRand(3) + 1
-        player:Say(lightDialogues[dialogueNo])
-        return
-    end
-
-    print(string.format("[DEBUG] Używam papierosa: %s (Typ: %s)", item:getName(), item:getFullType()))
-    local action = ISEatFoodAction:new(player, item, 1) -- Tworzymy nową akcję jedzenia
-    if action then
-        ISTimedActionQueue.add(action) -- Dodajemy akcję do kolejki
-        player:Say("Ahh, that's good!")
-    else
-        print("[ERROR] Nie udało się stworzyć akcji jedzenia!")
-    end
-
-    local fireSourceContainer = fireSource:getContainer()
-    local transferFireSource = ISInventoryTransferAction:new(player, fireSource, inv, fireSourceContainer)
-    ISTimedActionQueue.add(transferFireSource)
-end
-
 MySmokingModal = ISPanel:derive("MySmokingModal")
 
 function MySmokingModal:initialise()
@@ -211,7 +177,6 @@ TBC.smokeTobacco = function()
             ISInventoryPaneContextMenu.eatItem(item, 1, 0)
         else
             print("[WARNING] nie ma takiego papierosa!")
-        -- TBC.smokeTobaccoWithSelected(availableSmokingItems[1])
             return
         end
     else
@@ -225,8 +190,6 @@ TBC.oldSmokeTobacco = function()
     local player = getPlayer()
     local inv = player:getInventory()
     local dialogueNo, fireSourceContainer
-
-    
 
     local cigarettes = getFirstItem(EHK.cigarettes, inv, "cigarettes")
     if not cigarettes then
