@@ -1,4 +1,5 @@
 EHK = EHK or {}
+TBC = TBC or {}
 
 EHK.fireSources = {
     [1] = "Base.Lighter",
