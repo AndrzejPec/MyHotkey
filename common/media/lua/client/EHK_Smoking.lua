@@ -29,7 +29,7 @@ function getFirstItem(dictionary, inv, smokingItemType)
     return output
 end
 
-EHK.smoke = function()
+TBC.smokeTobacco = function()
     local player = getPlayer()
     local inv = player:getInventory()
     local dialogueNo, fireSourceContainer
