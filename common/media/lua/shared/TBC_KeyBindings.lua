@@ -1,6 +1,6 @@
 local TBC_bind = {}
 
-TBC_bind.value = "[Tobacco Mod]"
+TBC_bind.value = "[tobaccoMod]"
 table.insert(keyBinding, TBC_bind)
 
 TBC_bind = {}
