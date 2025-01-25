@@ -30,6 +30,10 @@ UI_EN = {
     UI_optionscreen_binding_sitOnTheGround = "Sit on the ground",
     UI_optionscreen_binding_lootAllUnfoundBooks = "Loot all unfound literature/media",
 
+    UI_optionscreen_binding_tobaccoMod="Tobacco Mod",
+    UI_optionscreen_binding_putTobaccoInLip="Put a snus/chew in lip",
+    UI_optionscreen_binding_smokeTobacco="Smoke tobacco",
+
     UI_optionscreen_EggonHotKeys_displayHotActions = "Display HotActions in the context menu",
     UI_optionscreen_EggonHotKeys_displayFlexKey = "Display FlexKey selection in the context menu",
     UI_optionscreen_EggonHotKeys_separateKeyForCorpsePickup = "Enable separate key for picking up corpses",
