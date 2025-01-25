@@ -1,6 +1,7 @@
 require "ISUI/ISPanel"
 require "TimedActions/ISBaseTimedAction"
 require "TimedActions/ISInventoryTransferAction"
+require "TimedActions/ISEatFoodAction"
 
 local ISEatFoodAction = require("TimedActions/ISEatFoodAction")
 
@@ -16,9 +17,27 @@ local lightDialogues = {
     [3] = "Gotta search some corpses for a lighter..."
 }
 
+function getFirstItem(dictionary, inv, smokingItemType)
+    local output
+    for i, fullType in pairs(dictionary) do
+        print(string.format("[DEBUG] Sprawdzam przedmiot: %s", fullType))
+        local identifier = useKey and i or fullType
+        output = inv:getFirstTypeRecurse(identifier)
+        if output and (smokingItemType ~= "cigarettes" or output.getBaseHunger) then
+            print(string.format("[DEBUG] Znaleziono przedmiot: %s", output:getName()))
+            break
+        else
+            print("[DEBUG] Nie znaleziono przedmiotu dla: " .. fullType)
+            output = nil
+        end
+    end
+    return output
+end
+
+
 TBC.smokeTobaccoWithSelected = function(item, inv)
     local player = getPlayer()
-    -- local inv = player:getInventory()
+    local inv = player:getInventory()
     if not item then
         print("[ERROR] Nie wybrano przedmiotu do palenia!")
         return
@@ -35,6 +54,7 @@ TBC.smokeTobaccoWithSelected = function(item, inv)
         return
     end
 
+    print(string.format("[DEBUG] Używam papierosa: %s (Typ: %s)", item:getName(), item:getFullType()))
     local action = ISEatFoodAction:new(player, item, 1) -- Tworzymy nową akcję jedzenia
     if action then
         ISTimedActionQueue.add(action) -- Dodajemy akcję do kolejki
@@ -43,10 +63,9 @@ TBC.smokeTobaccoWithSelected = function(item, inv)
         print("[ERROR] Nie udało się stworzyć akcji jedzenia!")
     end
 
-        local fireSourceContainer = fireSource:getContainer()
-        local transferFireSource = ISInventoryTransferAction:new(player, fireSource, inv, fireSourceContainer)
-        ISTimedActionQueue.add(transferFireSource)
-    end
+    local fireSourceContainer = fireSource:getContainer()
+    local transferFireSource = ISInventoryTransferAction:new(player, fireSource, inv, fireSourceContainer)
+    ISTimedActionQueue.add(transferFireSource)
 end
 
 MySmokingModal = ISPanel:derive("MySmokingModal")
@@ -64,6 +83,10 @@ function MySmokingModal:create()
     local player = getPlayer()
     local inv = player:getInventory()
     local smokingItemsForModal = TBC.getAllItems(EHK.cigarettes, inv)
+    if not smokingItemsForModal then
+        print("[ERROR] Nie znaleziono przedmiotów do palenia.")
+        return
+    end
 
     -- Obliczamy wysokość modala na podstawie liczby przycisków
     local totalHeight = (#smokingItemsForModal * (btnHeight + btnSpacing)) + btnHeight + (2 * yOffset)
@@ -103,20 +126,30 @@ end
 function MySmokingModal:onOptionSelected(smokingItem)
     local player = getPlayer()
     local inv = player:getInventory()
+
     if smokingItem and smokingItem.getFullType then
+        -- Pobierz fullType wybranego przedmiotu
         local fullType = smokingItem:getFullType()
-        item = inv:getFirstTypeRecurse(fullType) -- Ponowne pobranie przedmiotu z inwentarza
-    end
-    if item then
-        print(string.format("[DEBUG] Wybrano do palenia: %s (Typ: %s)", item:getName(), item:getFullType()))
-        TBC.smokeTobaccoWithSelected(item, inv)
+        
+        -- Spróbuj znaleźć przedmiot w inwentarzu na podstawie fullType
+        local item = inv:getFirstTypeRecurse(fullType)
+
+        if item then
+            print(string.format("[DEBUG] Wybrano do palenia: %s (Typ: %s)", item:getName(), item:getFullType()))
+            
+            -- Użyj ISInventoryPaneContextMenu.eatItem do rozpoczęcia akcji
+            ISInventoryPaneContextMenu.eatItem(item, 1, 0)
+            print("Rozpoczęto akcję jedzenia wybranego papierosa!")
+        else
+            print("[ERROR] Nie udało się znaleźć przedmiotu w inwentarzu na podstawie fullType!")
+        end
     else
-        print("[ERROR] Nie udało się znaleźć obiektu do palenia w inwentarzu!")
-        self:onClose()
-        return
+        print("[ERROR] Nieprawidłowy przedmiot lub brak metody getFullType!")
     end
-    self:onClose()
+
+    self:onClose() -- Zamknięcie modala
 end
+
 
 function MySmokingModal:onClose()
     self:setVisible(false)
@@ -148,25 +181,6 @@ function OpenMySmokingModal()
     modal:addToUIManager()
 end
 
-function getFirstItem(dictionary, inv, smokingItemType)
-    local output
-    for i, fullType in pairs(dictionary) do
-        local identifier
-        if useKey then
-            identifier = i
-        else
-            identifier = fullType
-        end
-        output = inv:getFirstTypeRecurse(identifier)
-        if output and (smokingItemType ~= "cigarettes" or output.getBaseHunger) then
-            break
-        else
-            output = nil
-        end
-    end
-    return output
-end
-
 TBC.smokeTobacco = function()
     local player = getPlayer()
     local inv = player:getInventory()
@@ -179,13 +193,27 @@ TBC.smokeTobacco = function()
         return
     end
 
+    local fireSource = getFirstItem(EHK.fireSources, inv)
+    if not fireSource then
+        print("[DEBUG] Brak zapalniczki lub źródła ognia!")
+        local dialogueNo = ZombRand(3) + 1
+        player:Say(lightDialogues[dialogueNo])
+        return
+    end
+
     if #availableSmokingItems > 1 then
         print("[DEBUG] Więcej niż jeden przedmiot do palenia. Otwieram modal.")
         OpenMySmokingModal()
         return
     elseif #availableSmokingItems == 1 then
-        TBC.smokeTobaccoWithSelected(availableSmokingItems[1])
-        return
+        local item = availableSmokingItems[1]
+        if item then
+            ISInventoryPaneContextMenu.eatItem(item, 1, 0)
+        else
+            print("[WARNING] nie ma takiego papierosa!")
+        -- TBC.smokeTobaccoWithSelected(availableSmokingItems[1])
+            return
+        end
     else
     print("[DEBUG] Brak przedmiotów do palenia!")
         local dialogueNo = ZombRand(3) + 1
