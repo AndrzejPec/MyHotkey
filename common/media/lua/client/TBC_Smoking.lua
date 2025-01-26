@@ -98,7 +98,7 @@ function MySmokingModal:onOptionSelected(smokingItem)
         local fullType = smokingItem:getFullType()
         
         -- Spróbuj znaleźć przedmiot w inwentarzu na podstawie fullType
-        local item = inv:getFirstTypeRecurse(fullType)
+        local item = getFirstItem({fullType}, inv)
 
         if item then
             print(string.format("[DEBUG] Wybrano do palenia: %s (Typ: %s)", item:getName(), item:getFullType()))

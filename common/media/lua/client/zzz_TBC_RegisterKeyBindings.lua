@@ -11,6 +11,11 @@ TBC.keyConfigs = {
         action = TBC.smokeTobacco,
         keyCode = Keyboard.KEY_NONE
     }
+    sitOnTheGround = {
+        displayName = "Sit on the ground"
+        action = TBC.sitOnTheGround,
+        keyCode = Keyboard.KEY_NONE
+    }
 }
 
 local TBC_bind = {}
