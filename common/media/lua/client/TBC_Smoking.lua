@@ -48,7 +48,7 @@ function MySmokingModal:create()
     local yOffset = 10 -- Początkowy odstęp od góry
     local player = getPlayer()
     local inv = player:getInventory()
-    local smokingItemsForModal = TBC.getAllItems(EHK.cigarettes, inv)
+    local smokingItemsForModal = TBC.getAllItems(TBC.cigarettes, inv)
     if not smokingItemsForModal then
         print("[ERROR] Nie znaleziono przedmiotów do palenia.")
         return
@@ -104,6 +104,8 @@ function MySmokingModal:onOptionSelected(smokingItem)
             print(string.format("[DEBUG] Wybrano do palenia: %s (Typ: %s)", item:getName(), item:getFullType()))
             
             -- Użyj ISInventoryPaneContextMenu.eatItem do rozpoczęcia akcji
+            -- local action = ISInventoryPaneContextMenu.eatItem(item, 1, 0)
+            -- ISTimedActionQueue.add(action)
             ISInventoryPaneContextMenu.eatItem(item, 1, 0)
             print("Rozpoczęto akcję jedzenia wybranego papierosa!")
         else
@@ -152,14 +154,14 @@ TBC.smokeTobacco = function()
     local inv = player:getInventory()
     local dialogueNo, fireSourceContainer
 
-    local availableSmokingItems = TBC.getAllItems(EHK.cigarettes, inv)
+    local availableSmokingItems = TBC.getAllItems(TBC.cigarettes, inv)
     if not availableSmokingItems then
         print("[DEBUG] Wywołuję TBC.oldSmokeTobacco jako fallback.")
         TBC.oldSmokeTobacco()
         return
     end
 
-    local fireSource = getFirstItem(EHK.fireSources, inv)
+    local fireSource = getFirstItem(TBC.fireSources, inv)
     if not fireSource then
         print("[DEBUG] Brak zapalniczki lub źródła ognia!")
         local dialogueNo = ZombRand(3) + 1
@@ -175,6 +177,8 @@ TBC.smokeTobacco = function()
         local item = availableSmokingItems[1]
         if item then
             ISInventoryPaneContextMenu.eatItem(item, 1, 0)
+            -- local action = ISInventoryPaneContextMenu.eatItem(item, 1, 0)
+            -- ISTimedActionQueue.add(action)
         else
             print("[WARNING] nie ma takiego papierosa!")
             return
@@ -191,9 +195,9 @@ TBC.oldSmokeTobacco = function()
     local inv = player:getInventory()
     local dialogueNo, fireSourceContainer
 
-    local cigarettes = getFirstItem(EHK.cigarettes, inv, "cigarettes")
+    local cigarettes = getFirstItem(TBC.cigarettes, inv, "cigarettes")
     if not cigarettes then
-        local cigarettesPack = getFirstItem(EHK.cigarettesPacks, inv)
+        local cigarettesPack = getFirstItem(TBC.cigarettesPacks, inv)
         if not cigarettesPack then
             dialogueNo = ZombRand(3) + 1
             player:Say(cigarettesDialogues[dialogueNo])
@@ -209,7 +213,7 @@ TBC.oldSmokeTobacco = function()
             if itemRecipes:size() > 0 then
                 for i = 0, itemRecipes:size() - 1 do
                     recipe = itemRecipes:get(i)
-                    if EHK.validRecipes[recipe:getName()] then
+                    if TBC.validRecipes[recipe:getName()] then
                         local ingredientName = recipe:getSource():get(0):getItems():get(0)
                         if ingredientName == cigarettesPack:getFullType() then
                             break
@@ -231,7 +235,7 @@ TBC.oldSmokeTobacco = function()
         end
     end
 
-    local fireSource = getFirstItem(EHK.fireSources, inv)
+    local fireSource = getFirstItem(TBC.fireSources, inv)
     if not fireSource then
         dialogueNo = ZombRand(3) + 1
         player:Say(lightDialogues[dialogueNo])
