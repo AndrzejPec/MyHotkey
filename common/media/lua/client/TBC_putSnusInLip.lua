@@ -2,12 +2,14 @@ require "ISUI/ISCollapsableModalRichText"
 require "TimedActions/ISBaseTimedAction"
 require "SKAL_Actions"
 require "ISUI/ISPanel"
+require "TimedActions/ISInventoryTransferAction"
+require "TimedActions/ISEatFoodAction"
 
 MyCustomModal = ISPanel:derive("MyCustomModal")
 
-EHKEatSNUSAction = ISBaseTimedAction:derive("EHKEatSNUSAction")
+TBCEatSNUSAction = ISBaseTimedAction:derive("TBCEatSNUSAction")
 
-EHK.SNUS = {
+TBC.SNUS = {
     [1] = "Base.TobaccoChewing",
     [2] = "SKAL.SkalMint",
     [3] = "SKAL.SkalStraight",
@@ -21,23 +23,23 @@ EHK.SNUS = {
     [11] = "SKAL.XenCoffee",
 }
 
-function EHKEatSNUSAction:isValid()
+function TBCEatSNUSAction:isValid()
     -- Sprawdza, czy gracz wciąż ma SNUS w ekwipunku
     return self.food ~= nil and self.character:getInventory():contains(self.food)
 end
 
-function EHKEatSNUSAction:start()
-    print("[DEBUG] EHKEatSNUSAction:start()")
+function TBCEatSNUSAction:start()
+    print("[DEBUG] TBCEatSNUSAction:start()")
     self:setActionAnim("eat") -- Animacja jedzenia
     self.character:playSound("Eat") -- Dźwięk jedzenia
 end
 
-function EHKEatSNUSAction:stop()
-    print("[DEBUG] EHKEatSNUSAction:stop()")
+function TBCEatSNUSAction:stop()
+    print("[DEBUG] TBCEatSNUSAction:stop()")
     ISBaseTimedAction.stop(self) -- Zatrzymuje akcję, jeśli została anulowana
 end
 
-function EHKEatSNUSAction:perform()
+function TBCEatSNUSAction:perform()
     if not self.food or not self.character:getInventory():contains(self.food) then
         print("[ERROR] Food missing during perform()!")
         return
@@ -50,7 +52,7 @@ function EHKEatSNUSAction:perform()
     ISBaseTimedAction.perform(self)
 end
 
-function EHKEatSNUSAction:new(character, food)
+function TBCEatSNUSAction:new(character, food)
     local o = ISBaseTimedAction.new(self, character)
     setmetatable(o, self)
     self.__index = self
@@ -75,7 +77,7 @@ function MyCustomModal:create()
     local yOffset = 10 -- Początkowy odstęp od góry
     local player = getPlayer()
     local inv = player:getInventory()
-    local SNUSforModal = EHK.getAllItems(EHK.SNUS, inv)
+    local SNUSforModal = TBC.getAllItems(TBC.SNUS, inv)
 
     -- Obliczamy wysokość modala na podstawie liczby przycisków
     local totalHeight = (#SNUSforModal * (btnHeight + btnSpacing)) + btnHeight + (2 * yOffset) -- Dodatkowy przycisk "Close"
@@ -117,7 +119,7 @@ function MyCustomModal:onOptionSelected(button)
         local snus = button.internal
         -- Wypisujemy nazwę SNUS i typ
         print(string.format("[DEBUG] Wybrano SNUS: %s (Typ: %s)", snus:getName(), snus:getFullType()))
-        EHK.putSelectedSNUSInLip(snus)
+        TBC.putSelectedSNUSInLip(snus)
     else
         print("[DEBUG] Zamykam okno modalne.")
     end
@@ -188,10 +190,11 @@ end
 
 
 -- Function to handle putting SNUS in lip
-function EHK.putSelectedSNUSInLip(snus)
+function TBC.putSelectedSNUSInLip(snus)
     local player = getPlayer()
+    local inv = player:getInventory()
     local snusType = snus and snus:getFullType() or "Unknown"
-    print("[DEBUG] Called EHK.putSelectedSNUSInLip")
+    print("[DEBUG] Called TBC.putSelectedSNUSInLip")
     print("[DEBUG] Using SNUS: " .. (snus and snus:getName() or "nil"))
 
     if not snus then
@@ -208,8 +211,9 @@ function EHK.putSelectedSNUSInLip(snus)
         print("[DEBUG] Added ISTakePillAction to queue.")
     else
         print("[DEBUG] Detected non-TobaccoChewing SNUS. Calling OnEat_Smokeless.")
-        local action = EHKEatSNUSAction:new(player, snus)
-        ISTimedActionQueue.add(action)
+        
+        local item = getFirstItem({snusType}, inv)
+        ISInventoryPaneContextMenu.eatItem(item, 1, 0)
     end
 end
 -- New function for managing SNUS
@@ -220,7 +224,7 @@ function TBC.putTobaccoInLip()
 
     print("[DEBUG] Called TBC.putTobaccoInLip")
     print("[DEBUG] Gathering SNUS from inventory...")
-    local availableSNUS = TBC.getAllItems(EHK.SNUS, inv)
+    local availableSNUS = TBC.getAllItems(TBC.SNUS, inv)
 
     print("[DEBUG] Number of available SNUS: " .. #availableSNUS)
 
@@ -230,7 +234,7 @@ function TBC.putTobaccoInLip()
         return
     elseif #availableSNUS == 1 then
         print("[DEBUG] Only one SNUS available. Using it directly.")
-        EHK.putSelectedSNUSInLip(availableSNUS[1])
+        TBC.putSelectedSNUSInLip(availableSNUS[1])
         return
     elseif #availableSNUS == 0 then
         print("[DEBUG] No SNUS found. Showing fallback dialogue.")
@@ -238,7 +242,3 @@ function TBC.putTobaccoInLip()
         player:Say(SNUSDialogues[dialogueNo])
     end
 end
-
--- Replace the original umbrella functionality
-EHK.originalEquipUmbrella = EHK.equipUmbrella
-EHK.equipUmbrella = EHK.putSNUSInLip
