@@ -2,5 +2,4 @@ UI_EN = {
     UI_optionscreen_binding_tobaccoMod="Tobacco Mod",
     UI_optionscreen_binding_putTobaccoInLip="Put a snus/chew in lip",
     UI_optionscreen_binding_smokeTobacco="Smoke tobacco",
-    UI_optionscreen_binding_sitOnTheGround="Sit on the ground",
 }
