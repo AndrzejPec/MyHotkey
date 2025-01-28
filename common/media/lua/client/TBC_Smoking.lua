@@ -17,7 +17,7 @@ local lightDialogues = {
     [3] = "Gotta search some corpses for a lighter..."
 }
 
-function getFirstItem(dictionary, inv, smokingItemType)
+function TBC.getFirstItem(dictionary, inv, smokingItemType)
     local output
     for i, fullType in pairs(dictionary) do
         print(string.format("[DEBUG] Sprawdzam przedmiot: %s", fullType))
@@ -90,12 +90,9 @@ function MySmokingModal:onOptionSelected(smokingItem)
 
     if smokingItem and smokingItem.getFullType then
         local fullType = smokingItem:getFullType()
-        
-        local item = getFirstItem({fullType}, inv)
-
+        local item = TBC.getFirstItem({fullType}, inv)
         if item then
             print(string.format("[DEBUG] Wybrano do palenia: %s (Typ: %s)", item:getName(), item:getFullType()))
-            
             -- Użyj ISInventoryPaneContextMenu.eatItem do rozpoczęcia akcji
             -- local action = ISInventoryPaneContextMenu.eatItem(item, 1, 0)
             -- ISTimedActionQueue.add(action)
@@ -153,7 +150,7 @@ TBC.smokeTobacco = function()
         return
     end
 
-    local fireSource = getFirstItem(TBC.fireSources, inv)
+    local fireSource = TBC.getFirstItem(TBC.fireSources, inv)
     if not fireSource then
         print("[DEBUG] Brak zapalniczki lub źródła ognia!")
         local dialogueNo = ZombRand(3) + 1
@@ -166,12 +163,13 @@ TBC.smokeTobacco = function()
         OpenMySmokingModal()
         return
     elseif #availableSmokingItems == 1 then
-        local item = availableSmokingItems[1]
-        if item then
-            local sourceContainer = item:getContainer()
-            ISInventoryPaneContextMenu.eatItem(item, 1, 0)
-            local transferSnusBack = ISInventoryTransferAction:new(player, item, inv, sourceContainer)
-            ISTimedActionQueue.add(transferSnusBack)
+        local cigarette = availableSmokingItems[1]
+        if cigarette then
+            local sourceContainer = cigarette:getContainer()
+            ISInventoryPaneContextMenu.eatItem(cigarette, 1, 0)
+            -- local transferSnusBack = ISInventoryTransferAction:new(player, item, inv, sourceContainer)
+            -- ISTimedActionQueue.add(transferSnusBack)
+            -- TBC.TransferItemsBack(cigarette)
             return
         end
     else
@@ -180,65 +178,3 @@ TBC.smokeTobacco = function()
         player:Say(cigarettesDialogues[dialogueNo])
     end
 end     
-
--- TBC.oldSmokeTobacco = function()
---     local player = getPlayer()
---     local inv = player:getInventory()
---     local dialogueNo, fireSourceContainer
-
---     local cigarettes = getFirstItem(TBC.cigarettes, inv, "cigarettes")
---     if not cigarettes then
---         local cigarettesPack = getFirstItem(TBC.cigarettesPacks, inv)
---         if not cigarettesPack then
---             dialogueNo = ZombRand(3) + 1
---             player:Say(cigarettesDialogues[dialogueNo])
---             return
---         else
---             local itemRecipes =
---                 RecipeManager.getUniqueRecipeItems(
---                 cigarettesPack,
---                 player,
---                 ISInventoryPaneContextMenu.getContainers(player)
---             )
---             local recipe
---             if itemRecipes:size() > 0 then
---                 for i = 0, itemRecipes:size() - 1 do
---                     recipe = itemRecipes:get(i)
---                     if TBC.validRecipes[recipe:getName()] then
---                         local ingredientName = recipe:getSource():get(0):getItems():get(0)
---                         if ingredientName == cigarettesPack:getFullType() then
---                             break
---                         else
---                             recipe = nil
---                         end
---                     else
---                         recipe = nil
---                     end
---                 end
---             end
---             if recipe then
---                 cigarettes = RecipeManager.PerformMakeItem(recipe, cigarettesPack, player, EHK.getContainers())
---                 inv:AddItem(cigarettes)
---             else
---                 player:Say("Must remember to unpack cigarettes!")
---                 return
---             end
---         end
---     end
-
---     local fireSource = getFirstItem(TBC.fireSources, inv)
---     if not fireSource then
---         dialogueNo = ZombRand(3) + 1
---         player:Say(lightDialogues[dialogueNo])
---         return
---     end
-
---     fireSourceContainer = fireSource:getContainer()
---     if cigarettes then
---         ISInventoryPaneContextMenu.eatItem(cigarettes, 1, 0)
---         local transferFireSource = ISInventoryTransferAction:new(player, fireSource, inv, fireSourceContainer)
---         ISTimedActionQueue.add(transferFireSource)
---     else
---         print("ERROR! Cigarettes not obtained!")
---     end
--- end

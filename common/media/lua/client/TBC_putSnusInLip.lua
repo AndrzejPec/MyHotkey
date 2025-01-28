@@ -23,48 +23,6 @@ TBC.SNUS = {
     [11] = "SKAL.XenCoffee",
 }
 
-function TBCEatSNUSAction:isValid()
-    -- Sprawdza, czy gracz wciąż ma SNUS w ekwipunku
-    return self.food ~= nil and self.character:getInventory():contains(self.food)
-end
-
-function TBCEatSNUSAction:start()
-    print("[DEBUG] TBCEatSNUSAction:start()")
-    self:setActionAnim("eat") -- Animacja jedzenia
-    self.character:playSound("Eat") -- Dźwięk jedzenia
-end
-
-function TBCEatSNUSAction:stop()
-    print("[DEBUG] TBCEatSNUSAction:stop()")
-    ISBaseTimedAction.stop(self) -- Zatrzymuje akcję, jeśli została anulowana
-end
-
-function TBCEatSNUSAction:perform()
-    if not self.food or not self.character:getInventory():contains(self.food) then
-        print("[ERROR] Food missing during perform()!")
-        return
-    end
-
-    -- Wywołanie jedzenia SNUS
-    OnEat_Smokeless(self.food, self.character, 1)
-
-    -- Kończenie akcji
-    ISBaseTimedAction.perform(self)
-end
-
-function TBCEatSNUSAction:new(character, food)
-    local o = ISBaseTimedAction.new(self, character)
-    setmetatable(o, self)
-    self.__index = self
-    o.character = character
-    o.food = food
-    o.ignoreAction = false -- Ustawienie domyślnej wartości
-    o.stopOnWalk = false -- Przerwij akcję, jeśli gracz zacznie chodzić
-    o.stopOnRun = true -- Przerwij akcję, jeśli gracz zacznie biec
-    o.maxTime = 100 -- Czas trwania akcji (w tickach, około 5 sekund)
-    return o
-end
-
 function MyCustomModal:initialise()
     ISPanel.initialise(self)
     self:create()
@@ -209,11 +167,12 @@ function TBC.putSelectedSNUSInLip(snus)
         local action = ISTakePillAction:new(player, snus)
         ISTimedActionQueue.add(action)
         print("[DEBUG] Added ISTakePillAction to queue.")
+        -- TBC.TransferItemsBack(snus)
     else
         print("[DEBUG] Detected non-TobaccoChewing SNUS. Calling OnEat_Smokeless.")
-        
-        local item = getFirstItem({snusType}, inv)
+        local item = TBC.getFirstItem({snusType}, inv)
         ISInventoryPaneContextMenu.eatItem(item, 1, 0)
+        -- TBC.TransferItemsBack(item)
     end
 end
 -- New function for managing SNUS
