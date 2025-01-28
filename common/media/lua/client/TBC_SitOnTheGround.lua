@@ -1,3 +1,3 @@
-function EHK.sitOnTheGround()
-    getPlayer():reportEvent("EventSitOnGround")
-end
+-- function EHK.sitOnTheGround()
+--     getPlayer():reportEvent("EventSitOnGround")
+-- end

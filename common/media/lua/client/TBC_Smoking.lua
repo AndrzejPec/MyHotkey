@@ -42,10 +42,10 @@ function MySmokingModal:initialise()
 end
 
 function MySmokingModal:create()
-    local btnWidth = 200 -- Szerokość przycisków
-    local btnHeight = 40 -- Wysokość przycisków
-    local btnSpacing = 10 -- Odstęp między przyciskami
-    local yOffset = 10 -- Początkowy odstęp od góry
+    local btnWidth = 200
+    local btnHeight = 40
+    local btnSpacing = 10
+    local yOffset = 10
     local player = getPlayer()
     local inv = player:getInventory()
     local smokingItemsForModal = TBC.getAllItems(TBC.cigarettes, inv)
@@ -54,13 +54,10 @@ function MySmokingModal:create()
         return
     end
 
-    -- Obliczamy wysokość modala na podstawie liczby przycisków
     local totalHeight = (#smokingItemsForModal * (btnHeight + btnSpacing)) + btnHeight + (2 * yOffset)
 
-    -- Aktualizujemy wysokość modala
-    self:setHeight(math.max(totalHeight, 150)) -- Minimum wysokości to 150, jeśli mało przycisków
+    self:setHeight(math.max(totalHeight, 150))
 
-    -- Tworzenie dynamicznych przycisków dla elementów do palenia
     for _, smokingItem in ipairs(smokingItemsForModal) do
         if smokingItem and smokingItem.getName then
             local itemName = smokingItem:getName()
@@ -73,14 +70,12 @@ function MySmokingModal:create()
             button.borderColor = {r = 1, g = 1, b = 1, a = 0.5}
             self:addChild(button)
     
-            -- Przesuwamy yOffset w dół
             yOffset = yOffset + btnHeight + btnSpacing
         else
             print("[ERROR] Nieprawidłowy obiekt w smokingItemsForModal")
         end
     end
 
-    -- Dodajemy przycisk "Close" na samym dole
     local closeButton = ISButton:new(10, yOffset, btnWidth, btnHeight, "Close", self, MySmokingModal.onClose)
     closeButton.internal = "CLOSE"
     closeButton:initialise()
@@ -94,10 +89,8 @@ function MySmokingModal:onOptionSelected(smokingItem)
     local inv = player:getInventory()
 
     if smokingItem and smokingItem.getFullType then
-        -- Pobierz fullType wybranego przedmiotu
         local fullType = smokingItem:getFullType()
         
-        -- Spróbuj znaleźć przedmiot w inwentarzu na podstawie fullType
         local item = getFirstItem({fullType}, inv)
 
         if item then
@@ -115,9 +108,8 @@ function MySmokingModal:onOptionSelected(smokingItem)
         print("[ERROR] Nieprawidłowy przedmiot lub brak metody getFullType!")
     end
 
-    self:onClose() -- Zamknięcie modala
+    self:onClose()
 end
-
 
 function MySmokingModal:onClose()
     self:setVisible(false)
@@ -176,11 +168,10 @@ TBC.smokeTobacco = function()
     elseif #availableSmokingItems == 1 then
         local item = availableSmokingItems[1]
         if item then
+            local sourceContainer = item:getContainer()
             ISInventoryPaneContextMenu.eatItem(item, 1, 0)
-            -- local action = ISInventoryPaneContextMenu.eatItem(item, 1, 0)
-            -- ISTimedActionQueue.add(action)
-        else
-            print("[WARNING] nie ma takiego papierosa!")
+            local transferSnusBack = ISInventoryTransferAction:new(player, item, inv, sourceContainer)
+            ISTimedActionQueue.add(transferSnusBack)
             return
         end
     else
