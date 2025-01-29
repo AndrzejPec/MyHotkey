@@ -1,25 +1,21 @@
-EHK = EHK or {}
-
-function EHK.takePills(fullType)
+function TBC.takePills(fullType)
     local player = getPlayer()
     local inv = player:getInventory()
     local pills = inv:getFirstTypeRecurse(fullType)
     if pills then
-        local sourceContainer = pills:getContainer()
         ISInventoryPaneContextMenu.takePill(pills, 0)
-        local transferPillsBack = ISInventoryTransferAction:new(player, pills, inv, sourceContainer)
-        ISTimedActionQueue.add(transferPillsBack)
+        TBC.TransferItemsBack(pills)
     else
         player:Say("I'm out of pills! Goddamn it!")
     end
 end
 
-function EHK.takeBetaBlockers()
-    EHK.takePills("Base.PillsBeta")
+function TBC.takeBetaBlockers()
+    TBC.takePills("Base.PillsBeta")
 end
-function EHK.takePainKillers()
-    EHK.takePills("Base.Pills")
+function TBC.takePainKillers()
+    TBC.takePills("Base.Pills")
 end
-function EHK.takeVitamins()
-    EHK.takePills("Base.PillsVitamins")
+function TBC.takeVitamins()
+    TBC.takePills("Base.PillsVitamins")
 end

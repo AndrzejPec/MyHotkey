@@ -11,11 +11,11 @@ TBC.keyConfigs = {
         action = TBC.smokeTobacco,
         keyCode = Keyboard.KEY_NONE
     },
-    sitOnTheGround = {
-        displayName = "Sit on the ground",
-        action = TBC.sitOnTheGround,
-        keyCode = Keyboard.KEY_NONE
-    }
+    -- sitOnTheGround = {
+    --     displayName = "Sit on the ground",
+    --     action = TBC.sitOnTheGround,
+    --     keyCode = Keyboard.KEY_NONE
+    -- }
 }
 
 local TBC_bind = {}
@@ -24,7 +24,7 @@ table.insert(keyBinding, TBC_bind)
 
 for keyVar, cfg in pairs(TBC.keyConfigs) do
     TBC_bind = {}
-    TBC_bind.value = keyVar -- Use keyVar as identifier
+    TBC_bind.value = keyVar
     TBC_bind.key = cfg.keyCode
     table.insert(keyBinding, TBC_bind)
 end
