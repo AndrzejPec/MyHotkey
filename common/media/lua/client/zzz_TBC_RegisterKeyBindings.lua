@@ -24,7 +24,7 @@ table.insert(keyBinding, TBC_bind)
 
 for keyVar, cfg in pairs(TBC.keyConfigs) do
     TBC_bind = {}
-    TBC_bind.value = keyVar
+    TBC_bind.value = keyVar -- Use keyVar as identifier
     TBC_bind.key = cfg.keyCode
     table.insert(keyBinding, TBC_bind)
 end
