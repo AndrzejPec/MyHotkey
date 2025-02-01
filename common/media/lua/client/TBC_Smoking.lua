@@ -18,15 +18,15 @@ local ISEatFoodAction = require("TimedActions/ISEatFoodAction")
 -- }
 
 local cigarettesDialogues = {
-    [1] = getText("UI_TBC_cigarettes_1"),
-    [2] = getText("UI_TBC_cigarettes_2"),
-    [3] = getText("UI_TBC_cigarettes_3")
+    [1] = getText("IGUI_TBC_cigarettes_1"),
+    [2] = getText("IGUI_TBC_cigarettes_2"),
+    [3] = getText("IGUI_TBC_cigarettes_3"),
 }
 
 local lightDialogues = {
-    [1] = getText("UI_TBC_light_1"),
-    [2] = getText("UI_TBC_light_2"),
-    [3] = getText("UI_TBC_light_3")
+    [1] = getText("IGUI_TBC_light_1"),
+    [2] = getText("IGUI_TBC_light_2"),
+    [3] = getText("IGUI_TBC_light_3"),
 }
 
 function TBC.getFirstItem(dictionary, inv, smokingItemType)

@@ -1,9 +1,9 @@
 IG_UI_EN = {
-    IG_UI_TBC_cigarettes_1 = "I'd like to smoke so badly! If only I had some cigs...!",
-    IG_UI_TBC_cigarettes_2 = "I lost my fags again?! Goddamn it!",
-    IG_UI_TBC_cigarettes_3 = "A fag! A fag! My kingdom for a fag!",
+    IGUI_TBC_cigarettes_1 = "I'd like to smoke so badly! If only I had some cigs...!",
+    IGUI_TBC_cigarettes_2 = "I lost my fags again?! Goddamn it!",
+    IGUI_TBC_cigarettes_3 = "A fag! A fag! My kingdom for a fag!",
 
-    IG_UI_TBC_light_1 = "Anybody got light?",
-    IG_UI_TBC_light_2 = "Where are my matches?",
-    IG_UI_TBC_light_3 = "Gotta search some corpses for a lighter...",
+    IGUI_TBC_light_1 = "Anybody got light?",
+    IGUI_TBC_light_2 = "Where are my matches?",
+    IGUI_TBC_light_3 = "Gotta search some corpses for a lighter...",
 }
