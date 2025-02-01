@@ -123,6 +123,7 @@ end
 function MySmokingModal:onClose()
     self:setVisible(false)
     self:removeFromUIManager()
+    isSmokingModalOpen = false
 end
 
 function MySmokingModal:new(x, y, width, height)
@@ -137,7 +138,16 @@ function MySmokingModal:new(x, y, width, height)
     return o
 end
 
+local isSmokingModalOpen = false
+
 function OpenMySmokingModal()
+    if isSmokingModalOpen then
+        print("[DEBUG] Modal jest już otwarty! Nie otwieram kolejnego.")
+        return
+    end
+
+    isSmokingModalOpen = true
+
     local screenWidth = getCore():getScreenWidth()
     local screenHeight = getCore():getScreenHeight()
     local width = 220

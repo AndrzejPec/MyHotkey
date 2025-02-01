@@ -74,6 +74,7 @@ end
 function MyCustomModal:onClose()
     self:setVisible(false)
     self:removeFromUIManager()
+    isCustomModalOpen = false
 end
 
 function MyCustomModal:new(x, y, width, height)
@@ -88,8 +89,17 @@ function MyCustomModal:new(x, y, width, height)
     return o
 end
 
+local isCustomModalOpen = false
+
 -- Funkcja do otwierania okna
 function OpenMyCustomModal()
+    if isCustomModalOpen then
+        print("[DEBUG] Snus modal already visible, terminating modal show func...")
+        return
+    end
+
+    isCustomModalOpen = true
+
     local screenWidth = getCore():getScreenWidth()
     local screenHeight = getCore():getScreenHeight()
     local width = 220
