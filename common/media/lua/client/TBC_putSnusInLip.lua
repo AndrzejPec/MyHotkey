@@ -9,20 +9,6 @@ MyCustomModal = ISPanel:derive("MyCustomModal")
 
 TBCEatSNUSAction = ISBaseTimedAction:derive("TBCEatSNUSAction")
 
-TBC.SNUS = {
-    [1] = "Base.TobaccoChewing",
-    [2] = "SKAL.SkalMint",
-    [3] = "SKAL.SkalStraight",
-    [4] = "SKAL.SkalWintergreen",
-    [5] = "SKAL.SkalBlackshields",
-    [6] = "SKAL.HalkenWintergreen",
-    [7] = "SKAL.CopingWintergreen",
-    [8] = "SKAL.RealManPouch",
-    [9] = "SKAL.KojakMint",
-    [10] = "SKAL.XenMint",
-    [11] = "SKAL.XenCoffee",
-}
-
 function MyCustomModal:initialise()
     ISPanel.initialise(self)
     self:create()
@@ -162,7 +148,7 @@ function TBC.putSelectedSNUSInLip(snus)
 
     print("[DEBUG] SNUS Type: " .. snusType)
 
-    if snusType == "Base.TobaccoChewing" then
+    if snusType == "Base.TobaccoChewing" or snusType == "Base.HempChewing" then
         print("[DEBUG] Detected Base.TobaccoChewing. Initializing ISTakePillAction.")
         local action = ISTakePillAction:new(player, snus)
         ISTimedActionQueue.add(action)

@@ -2,12 +2,12 @@ TBC = TBC or {}
 
 TBC.keyConfigs = {
     putTobaccoInLip = {
-        displayName = "Put a snus/chew in lip",
+        displayName = getText("UI_TBC_optionscreen_binding_putTobaccoInLip"),
         action = TBC.putTobaccoInLip,
         keyCode = Keyboard.KEY_NONE
     },
     smokeTobacco = {
-        displayName = "Smoke tobacco",
+        displayName = getText("UI_TBC_optionscreen_binding_smokeTobacco"),
         action = TBC.smokeTobacco,
         keyCode = Keyboard.KEY_NONE
     },
@@ -19,12 +19,12 @@ TBC.keyConfigs = {
 }
 
 local TBC_bind = {}
-TBC_bind.value = "[tobaccoMod]"
+TBC_bind.value = TBC_bind.value = "[" .. getText("UI_TBC_optionscreen_binding_tobaccoMod") .. "]"
 table.insert(keyBinding, TBC_bind)
 
 for keyVar, cfg in pairs(TBC.keyConfigs) do
-    TBC_bind = {}
-    TBC_bind.value = keyVar -- Use keyVar as identifier
-    TBC_bind.key = cfg.keyCode
-    table.insert(keyBinding, TBC_bind)
+    local TBC_keybind = {}
+    TBC_keybind.value = keyVar -- Use keyVar as identifier
+    TBC_keybind.key = cfg.keyCode
+    table.insert(keyBinding, TBC_keybind)
 end

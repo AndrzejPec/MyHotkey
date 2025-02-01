@@ -20,8 +20,40 @@ TBC.cigarettes = {
     [4] = "Base.Cigarillo",
     [5] = "Base.CigaretteSingle_Clove",
     [6] = "Base.SmokingPipe_Tobacco",
-    [7] = "CVCrackCigs.CrackCigSingle",
-    -- [9] = "Base.TobaccoLoose", -- loose tobacco is not an edible item, since it is only used in recipe for rolled cigarettes
+    [7] = "Base.GlassSmokingPipe_Tobacco",
+    [8] = "Base.CanPipe_Tobacco",
+    -- Mod Narcotics smokeable items
+    [9] = "NnC.BluntAK",
+    [10] = "NnC.BluntNorthernLights",
+    [11] = "NnC.BluntSourDiesel",
+    [12] = "NnC.JointAK",
+    [13] = "NnC.JointNorthernLights",
+    [14] = "NnC.JointSourDiesel",
+    [15] = "NnC.WaterBongAK",
+    [16] = "NnC.WaterBongNorthernLights",
+    [17] = "NnC.WaterBongSourDiesel",
+    [18] = "NnC.WeedPipeAK",
+    [19] = "NnC.WeedPipeNorthernLights",
+    [20] = "NnC.WeedPipeSourDiesel",
+    [21] = "NnC.CanPipeAK",
+    [22] = "NnC.CanPipeNorthernLights",
+    [23] = "NnC.CanPipeSourDiesel",
+    -- Mod Hemp & Tobacco smokeable items
+    [24] = "Base.CanPipe_Hemp",
+    [25] = "Base.HempCigarillo",
+    [26] = "Base.HempCigar",
+    [27] = "Base.GlassSmokingPipe_Hemp",
+    [28] = "Base.HempCigarette",
+    [29] = "Base.SmokingPipe_Hemp",
+}
+
+TBC.Drugs = {
+    [1] = "NnC.CokeBaggie",
+    [2] = "NnC.LSD",
+    [3] = "NnC.MDMA",
+    [4] = "NnC.Oxycodone",
+    [5] = "NnC.Ritalin",
+    [6] = "NnC.Xanax",
 }
 
 TBC.SNUS = {
@@ -36,6 +68,7 @@ TBC.SNUS = {
     [9] = "Base.KojakMint",
     [10] = "Base.XenMint",
     [11] = "Base.XenCoffee",
+    [12] = "Base.HempChewing",
 }
 
 TBC.cigarettesPacks = {
