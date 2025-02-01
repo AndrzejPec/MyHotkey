@@ -1,5 +1,5 @@
 UI_PL = {
-    UI_TBC_optionscreen_binding_tobaccoMod="Tobacco Mod",
-    UI_TBC_optionscreen_binding_putTobaccoInLip="Zażyj snusa",
-    UI_TBC_optionscreen_binding_smokeTobacco="Zapal tytoń",
+    UI_optionscreen_binding_tobaccoMod="Tobacco Mod",
+    UI_optionscreen_binding_putTobaccoInLip="Zażyj snusa (tytoń do żucia)",
+    UI_optionscreen_binding_smokeTobacco="Zapal tytoń",
 }

@@ -19,7 +19,7 @@ TBC.keyConfigs = {
 }
 
 local TBC_bind = {}
-TBC_bind.value = TBC_bind.value = "[" .. getText("UI_TBC_optionscreen_binding_tobaccoMod") .. "]"
+TBC_bind.value = "[tobaccoMod]"
 table.insert(keyBinding, TBC_bind)
 
 for keyVar, cfg in pairs(TBC.keyConfigs) do

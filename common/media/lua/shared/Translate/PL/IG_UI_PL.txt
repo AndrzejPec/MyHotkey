@@ -1,0 +1,9 @@
+IG_UI_PL = {
+    IG_UI_TBC_cigarettes_1 = "Chciałbym zapalić tak bardzo! Gdybym tylko miał jakieś fajki...!",
+    IG_UI_TBC_cigarettes_2 = "Znowu zgubiłem swoje fajki?! Cholera!",
+    IG_UI_TBC_cigarettes_3 = "Fajka! Fajka! Królestwo za fajkę!",
+
+    IG_UI_TBC_light_1 = "Ktoś ma ogień?",
+    IG_UI_TBC_light_2 = "Gdzie są moje zapałki?",
+    IG_UI_TBC_light_3 = "Muszę przeszukać jakieś zwłoki w poszukiwaniu zapalniczki...",
+}
