@@ -2,4 +2,8 @@ UI_EN = {
     UI_optionscreen_binding_tobaccoMod="Tobacco Mod",
     UI_optionscreen_binding_putTobaccoInLip="Put a snus/chew in lip",
     UI_optionscreen_binding_smokeTobacco="Smoke tobacco",
+
+    UI_Intro1 = "TIRURIRU-TIRURIRU-TIRURU-RURURURU...",
+    UI_Intro2 = "JEBALI HELEEEEEEEEEEEE... ee...",
+    UI_Intro3 = "NIESTETY, NIESTETY, NIESTETY NIE...!"
 }

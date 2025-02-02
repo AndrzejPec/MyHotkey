@@ -117,13 +117,14 @@ function MySmokingModal:onOptionSelected(smokingItem)
         print("[ERROR] Nieprawidłowy przedmiot lub brak metody getFullType!")
     end
 
+    -- isSmokingModalOpen = false
     self:onClose()
 end
 
 function MySmokingModal:onClose()
+    -- isSmokingModalOpen = false
     self:setVisible(false)
     self:removeFromUIManager()
-    isSmokingModalOpen = false
 end
 
 function MySmokingModal:new(x, y, width, height)
@@ -138,15 +139,15 @@ function MySmokingModal:new(x, y, width, height)
     return o
 end
 
-local isSmokingModalOpen = false
+-- local isSmokingModalOpen = false
 
 function OpenMySmokingModal()
-    if isSmokingModalOpen then
-        print("[DEBUG] Modal jest już otwarty! Nie otwieram kolejnego.")
-        return
-    end
+    -- if isSmokingModalOpen then
+    --     print("[DEBUG] Modal jest już otwarty! Nie otwieram kolejnego.")
+    --     return
+    -- end
 
-    isSmokingModalOpen = true
+    -- isSmokingModalOpen = true
 
     local screenWidth = getCore():getScreenWidth()
     local screenHeight = getCore():getScreenHeight()

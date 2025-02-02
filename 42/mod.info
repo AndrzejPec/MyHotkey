@@ -4,6 +4,5 @@ poster=poster.png
 id=myTobaccoHotkeyModDevelop
 icon=icon.png
 author=pimatstudio (Andrzej Pec)
-pzversion=42.2.0+
-versionMin=42.0
+versionMin=42.2.0
 modversion=1.0

@@ -58,16 +58,16 @@ TBC.Drugs = {
 
 TBC.SNUS = {
     [1] = "Base.TobaccoChewing",
-    [2] = "Base.SkalMint",
-    [3] = "Base.SkalStraight",
-    [4] = "Base.SkalWintergreen",
-    [5] = "Base.SkalBlackshields",
-    [6] = "Base.HalkenWintergreen",
-    [7] = "Base.CopingWintergreen",
-    [8] = "Base.RealManPouch",
-    [9] = "Base.KojakMint",
-    [10] = "Base.XenMint",
-    [11] = "Base.XenCoffee",
+    [2] = "SKAL.SkalMint",
+    [3] = "SKAL.SkalStraight",
+    [4] = "SKAL.SkalWintergreen",
+    [5] = "SKAL.SkalBlackshields",
+    [6] = "SKAL.HalkenWintergreen",
+    [7] = "SKAL.CopingWintergreen",
+    [8] = "SKAL.RealManPouch",
+    [9] = "SKAL.KojakMint",
+    [10] = "SKAL.XenMint",
+    [11] = "SKAL.XenCoffee",
     [12] = "Base.HempChewing",
 }
 
@@ -79,15 +79,15 @@ TBC.cigarettesPacks = {
 
 -- apparently "logs" are packs of SNUS tabacco, they provide 5 packs of SNUS (SKAL)
 TBC.SNUSlogs = {
-    [1] = "Base.SkalMintLog",
-    [2] = "Base.SkalWintergreenLog",
-    [3] = "Base.SkalStraightLog",
-    [4] = "Base.BlackshieldsLog",
-    [5] = "Base.KojakMintLog",
-    [6] = "Base.CopingWintergreenLog",
-    [7] = "Base.HalkenWintergreenLog",
-    [8] = "Base.XenMintLog",
-    [9] = "Base.XenCoffeeLog",
+    [1] = "SKAL.SkalMintLog",
+    [2] = "SKAL.SkalWintergreenLog",
+    [3] = "SKAL.SkalStraightLog",
+    [4] = "SKAL.BlackshieldsLog",
+    [5] = "SKAL.KojakMintLog",
+    [6] = "SKAL.CopingWintergreenLog",
+    [7] = "SKAL.HalkenWintergreenLog",
+    [8] = "SKAL.XenMintLog",
+    [9] = "SKAL.XenCoffeeLog",
 }
 
 TBC.validRecipes = {
