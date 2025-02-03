@@ -38,14 +38,14 @@ local CLOSE_BTN_OFFSET = 15
 function TBC.getFirstItem(dictionary, inv, smokingItemType)
     local output
     for i, fullType in pairs(dictionary) do
-        print(string.format("[DEBUG] Sprawdzam przedmiot: %s", fullType))
+        -- print(string.format("[DEBUG] Sprawdzam przedmiot: %s", fullType))
         local identifier = useKey and i or fullType
         output = inv:getFirstTypeRecurse(identifier)
         if output and (smokingItemType ~= "cigarettes" or output.getBaseHunger) then
-            print(string.format("[DEBUG] Znaleziono przedmiot: %s", output:getName()))
+            -- print(string.format("[DEBUG] Znaleziono przedmiot: %s", output:getName()))
             break
         else
-            print("[DEBUG] Nie znaleziono przedmiotu dla: " .. fullType)
+            -- print("[DEBUG] Nie znaleziono przedmiotu dla: " .. fullType)
             output = nil
         end
     end
@@ -68,7 +68,7 @@ function MySmokingModal:create()
     local inv = player:getInventory()
     local smokingItemsForModal = TBC.getAllItems(TBC.cigarettes, inv)
     if #smokingItemsForModal == 0 then
-        print("[ERROR] Nie znaleziono przedmiotów do palenia.")
+        -- print("[ERROR] Nie znaleziono przedmiotów do palenia.")
         return
     end
 
@@ -90,7 +90,7 @@ function MySmokingModal:create()
     
             yOffset = yOffset + btnHeight + btnSpacing
         else
-            print("[ERROR] Nieprawidłowy obiekt w smokingItemsForModal")
+            -- print("[ERROR] Nieprawidłowy obiekt w smokingItemsForModal")
         end
     end
 
@@ -110,17 +110,17 @@ function MySmokingModal:onOptionSelected(smokingItem)
         local fullType = smokingItem:getFullType()
         local item = TBC.getFirstItem({fullType}, inv)
         if item then
-            print(string.format("[DEBUG] Wybrano do palenia: %s (Typ: %s)", item:getName(), item:getFullType()))
+            -- print(string.format("[DEBUG] Wybrano do palenia: %s (Typ: %s)", item:getName(), item:getFullType()))
             -- Użyj ISInventoryPaneContextMenu.eatItem do rozpoczęcia akcji
             -- local action = ISInventoryPaneContextMenu.eatItem(item, 1, 0)
             -- ISTimedActionQueue.add(action)
             ISInventoryPaneContextMenu.eatItem(item, 1, 0)
-            print("Rozpoczęto akcję jedzenia wybranego papierosa!")
+            -- print("Rozpoczęto akcję jedzenia wybranego papierosa!")
         else
-            print("[ERROR] Nie udało się znaleźć przedmiotu w inwentarzu na podstawie fullType!")
+            -- print("[ERROR] Nie udało się znaleźć przedmiotu w inwentarzu na podstawie fullType!")
         end
     else
-        print("[ERROR] Nieprawidłowy przedmiot lub brak metody getFullType!")
+        -- print("[ERROR] Nieprawidłowy przedmiot lub brak metody getFullType!")
     end
 
     -- isSmokingModalOpen = false
@@ -154,7 +154,7 @@ function OpenMySmokingModal()
     --     return
     -- end
     if MySmokingModal.instance then
-        print("[DEBUG] Modal jest już otwarty! Nie otwieram kolejnego.")
+        -- print("[DEBUG] Modal jest już otwarty! Nie otwieram kolejnego.")
         return
     end
 
@@ -191,13 +191,13 @@ TBC.smokeTobacco = function()
 
     local fireSource = TBC.getFirstItem(TBC.fireSources, inv)
     if not fireSource then
-        print("[DEBUG] Brak zapalniczki lub źródła ognia!")
+        -- print("[DEBUG] Brak zapalniczki lub źródła ognia!")
         player:Say(lightDialogues[dialogueNo])
         return
     end
 
     if #availableSmokingItems > 1 then
-        print("[DEBUG] Więcej niż jeden przedmiot do palenia. Otwieram modal.")
+        -- print("[DEBUG] Więcej niż jeden przedmiot do palenia. Otwieram modal.")
         OpenMySmokingModal()
         return
     elseif #availableSmokingItems == 1 then
@@ -211,7 +211,7 @@ TBC.smokeTobacco = function()
             return
         end
     else
-    print("[DEBUG] Brak przedmiotów do palenia!")
+    -- print("[DEBUG] Brak przedmiotów do palenia!")
         player:Say(cigarettesDialogues[dialogueNo])
     end
 end     

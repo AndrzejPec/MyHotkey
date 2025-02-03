@@ -9,29 +9,28 @@ MyCustomModal = ISPanel:derive("MyCustomModal")
 
 TBCEatSNUSAction = ISBaseTimedAction:derive("TBCEatSNUSAction")
 
+local CLOSE_BTN_OFFSET = 15
+
 function MyCustomModal:initialise()
     ISPanel.initialise(self)
     self:create()
 end
 
 function MyCustomModal:create()
-    local btnWidth = 200 -- Szerokość przycisków
-    local btnHeight = 40 -- Wysokość przycisków
-    local btnSpacing = 10 -- Odstęp między przyciskami
-    local yOffset = 10 -- Początkowy odstęp od góry
+    local btnWidth = 200
+    local btnHeight = 40
+    local btnSpacing = 10
+    local yOffset = 10
     local player = getPlayer()
     local inv = player:getInventory()
     local SNUSforModal = TBC.getAllItems(TBC.SNUS, inv)
 
-    -- Obliczamy wysokość modala na podstawie liczby przycisków
-    local totalHeight = (#SNUSforModal * (btnHeight + btnSpacing)) + btnHeight + (2 * yOffset) -- Dodatkowy przycisk "Close"
+    local totalHeight = (#SNUSforModal * (btnHeight + btnSpacing)) + btnHeight + (2 * yOffset) + CLOSE_BTN_OFFSET
 
-    -- Aktualizujemy wysokość modala
-    self:setHeight(math.max(totalHeight, 150)) -- Minimum wysokości to 150, jeśli mało przycisków
+    self:setHeight(math.max(totalHeight, 150))
 
-    -- Tworzenie dynamicznych przycisków dla SNUS
     for _, snusType in ipairs(SNUSforModal) do
-        if snusType and snusType.getName then -- Sprawdzamy, czy obiekt istnieje i ma metodę getName
+        if snusType and snusType.getName then
             local snusName = snusType:getName()
             local button = ISButton:new(10, yOffset, btnWidth, btnHeight, snusName, self, MyCustomModal.onOptionSelected)
             button.internal = snusType
@@ -40,7 +39,6 @@ function MyCustomModal:create()
             button.borderColor = {r = 1, g = 1, b = 1, a = 0.5}
             self:addChild(button)
     
-            -- Przesuwamy yOffset w dół
             yOffset = yOffset + btnHeight + btnSpacing
         else
             print("[ERROR] Nieprawidłowy obiekt SNUS w SNUSforModal")
@@ -48,8 +46,7 @@ function MyCustomModal:create()
     end
     
 
-    -- Dodajemy przycisk "Close" na samym dole
-    local closeButton = ISButton:new(10, yOffset, btnWidth, btnHeight, "Close", self, MyCustomModal.onClose)
+    local closeButton = ISButton:new(10, yOffset + CLOSE_BTN_OFFSET, btnWidth, btnHeight, "Close", self, MyCustomModal.onClose)
     closeButton.internal = "CLOSE"
     closeButton:initialise()
     closeButton:instantiate()
@@ -61,8 +58,7 @@ end
 function MyCustomModal:onOptionSelected(button)
     if button.internal ~= "CLOSE" then
         local snus = button.internal
-        -- Wypisujemy nazwę SNUS i typ
-        print(string.format("[DEBUG] Wybrano SNUS: %s (Typ: %s)", snus:getName(), snus:getFullType()))
+        -- print(string.format("[DEBUG] Wybrano SNUS: %s (Typ: %s)", snus:getName(), snus:getFullType()))
         TBC.putSelectedSNUSInLip(snus)
     else
         print("[DEBUG] Zamykam okno modalne.")
@@ -91,7 +87,6 @@ end
 
 -- local isCustomModalOpen = false
 
--- Funkcja do otwierania okna
 function OpenMyCustomModal()
     -- if isCustomModalOpen then
     --     print("[DEBUG] Snus modal already visible, terminating modal show func...")
@@ -123,18 +118,18 @@ function TBC.getAllItems(dictionary, inv)
 
     local items = {}
     for index, fullType in pairs(dictionary) do
-        print(string.format("[DEBUG] Sprawdzam typ SNUS: %s", tostring(fullType)))
+        -- print(string.format("[DEBUG] Sprawdzam typ SNUS: %s", tostring(fullType)))
 
         local foundItem = inv:getFirstTypeRecurse(fullType)
         if foundItem then
-            print(string.format("[DEBUG] Znaleziono przedmiot: %s", foundItem:getFullType()))
+            -- print(string.format("[DEBUG] Znaleziono przedmiot: %s", foundItem:getFullType()))
             table.insert(items, foundItem)
         else
-            print(string.format("[WARNING] Nie znaleziono przedmiotu dla typu: %s", tostring(fullType)))
+            -- print(string.format("[WARNING] Nie znaleziono przedmiotu dla typu: %s", tostring(fullType)))
         end
     end
 
-    print(string.format("[DEBUG] Skanowanie zakończone. Liczba znalezionych SNUS: %d", #items))
+    -- print(string.format("[DEBUG] Skanowanie zakończone. Liczba znalezionych SNUS: %d", #items))
     for i, item in ipairs(items) do
         print(string.format("[DEBUG] Element #%d w items: %s", i, tostring(item)))
     end
@@ -142,57 +137,55 @@ function TBC.getAllItems(dictionary, inv)
     return items
 end
 
-
 -- Function to handle putting SNUS in lip
 function TBC.putSelectedSNUSInLip(snus)
     local player = getPlayer()
     local inv = player:getInventory()
     local snusType = snus and snus:getFullType() or "Unknown"
-    print("[DEBUG] Called TBC.putSelectedSNUSInLip")
-    print("[DEBUG] Using SNUS: " .. (snus and snus:getName() or "nil"))
+    -- print("[DEBUG] Called TBC.putSelectedSNUSInLip")
+    -- print("[DEBUG] Using SNUS: " .. (snus and snus:getName() or "nil"))
 
     if not snus then
-        print("[ERROR] SNUS object is nil")
+        -- print("[ERROR] SNUS object is nil")
         return
     end
 
-    print("[DEBUG] SNUS Type: " .. snusType)
+    -- print("[DEBUG] SNUS Type: " .. snusType)
 
     if snusType == "Base.TobaccoChewing" or snusType == "Base.HempChewing" then
-        print("[DEBUG] Detected Base.TobaccoChewing. Initializing ISTakePillAction.")
+        -- print("[DEBUG] Detected Base.TobaccoChewing. Initializing ISTakePillAction.")
         local action = ISTakePillAction:new(player, snus)
         ISTimedActionQueue.add(action)
-        print("[DEBUG] Added ISTakePillAction to queue.")
+        -- print("[DEBUG] Added ISTakePillAction to queue.")
         -- TBC.TransferItemsBack(snus)
     else
-        print("[DEBUG] Detected non-TobaccoChewing SNUS. Calling OnEat_Smokeless.")
+        -- print("[DEBUG] Detected non-TobaccoChewing SNUS. Calling OnEat_Smokeless.")
         local item = TBC.getFirstItem({snusType}, inv)
         ISInventoryPaneContextMenu.eatItem(item, 1, 0)
         -- TBC.TransferItemsBack(item)
     end
 end
--- New function for managing SNUS
+
 function TBC.putTobaccoInLip()
     local player = getPlayer()
     local inv = player:getInventory()
     local dialogueNo
 
-    print("[DEBUG] Called TBC.putTobaccoInLip")
-    print("[DEBUG] Gathering SNUS from inventory...")
+    -- print("[DEBUG] Called TBC.putTobaccoInLip")
+    -- print("[DEBUG] Gathering SNUS from inventory...")
     local availableSNUS = TBC.getAllItems(TBC.SNUS, inv)
 
-    print("[DEBUG] Number of available SNUS: " .. #availableSNUS)
+    -- print("[DEBUG] Number of available SNUS: " .. #availableSNUS)
 
-    -- Pokazanie modala, jeśli dostępnych SNUS jest więcej niż jeden
     if #availableSNUS > 1 then
         OpenMyCustomModal()
         return
     elseif #availableSNUS == 1 then
-        print("[DEBUG] Only one SNUS available. Using it directly.")
+        -- print("[DEBUG] Only one SNUS available. Using it directly.")
         TBC.putSelectedSNUSInLip(availableSNUS[1])
         return
     elseif #availableSNUS == 0 then
-        print("[DEBUG] No SNUS found. Showing fallback dialogue.")
+        -- print("[DEBUG] No SNUS found. Showing fallback dialogue.")
         dialogueNo = ZombRand(3) + 1
         player:Say(SNUSDialogues[dialogueNo])
     end
