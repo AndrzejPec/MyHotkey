@@ -6,4 +6,6 @@ IG_UI_EN = {
     IGUI_TBC_light_1 = "Anybody got light?",
     IGUI_TBC_light_2 = "Where are my matches?",
     IGUI_TBC_light_3 = "Gotta search some corpses for a lighter...",
+
+    IGUI_TBC_close_modal = "[....close....]"
 }

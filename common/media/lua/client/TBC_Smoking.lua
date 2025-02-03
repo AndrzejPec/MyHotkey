@@ -88,7 +88,7 @@ function MySmokingModal:create()
         end
     end
 
-    local closeButton = ISButton:new(10, yOffset, btnWidth, btnHeight, "Close", self, MySmokingModal.onClose)
+    local closeButton = ISButton:new(10, yOffset + 15, btnWidth, btnHeight, getText("IGUI_TBC_close_modal"), self, MySmokingModal.onClose)
     closeButton.internal = "CLOSE"
     closeButton:initialise()
     closeButton:instantiate()
