@@ -29,6 +29,8 @@ local lightDialogues = {
     [3] = getText("IGUI_TBC_light_3"),
 }
 
+local CLOSE_BTN_OFFSET = 15
+
 function TBC.getFirstItem(dictionary, inv, smokingItemType)
     local output
     for i, fullType in pairs(dictionary) do
@@ -66,7 +68,7 @@ function MySmokingModal:create()
         return
     end
 
-    local totalHeight = (#smokingItemsForModal * (btnHeight + btnSpacing)) + btnHeight + (2 * yOffset)
+    local totalHeight = (#smokingItemsForModal * (btnHeight + btnSpacing)) + btnHeight + (2 * yOffset) + CLOSE_BTN_OFFSET
 
     self:setHeight(math.max(totalHeight, 150))
 
@@ -88,7 +90,7 @@ function MySmokingModal:create()
         end
     end
 
-    local closeButton = ISButton:new(10, yOffset + 15, btnWidth, btnHeight, getText("IGUI_TBC_close_modal"), self, MySmokingModal.onClose)
+    local closeButton = ISButton:new(10, yOffset + CLOSE_BTN_OFFSET, btnWidth, btnHeight, getText("IGUI_TBC_close_modal"), self, MySmokingModal.onClose)
     closeButton.internal = "CLOSE"
     closeButton:initialise()
     closeButton:instantiate()
@@ -169,12 +171,18 @@ end
 TBC.smokeTobacco = function()
     local player = getPlayer()
     local inv = player:getInventory()
-    local dialogueNo, fireSourceContainer
+    local fireSourceContainer
+    local dialogueNo = ZombRand(3) + 1
 
     local availableSmokingItems = TBC.getAllItems(TBC.cigarettes, inv)
+    local availableCigarettesPack = TBC.getAllItems(TBC.cigarettesPacks, inv)
+
     if not availableSmokingItems then
-        print("[DEBUG] Couldn't find no cigs.")
-        -- TBC.oldSmokeTobacco()
+        if availableCigarettesPack == 0 then
+            player:Say(cigarettesDialogues[dialogueNo])
+        else
+            player:Say("I've got #availableCigarettesPack in my inv, I have to manually unpack any of them first.")
+        end
         return
     end
 

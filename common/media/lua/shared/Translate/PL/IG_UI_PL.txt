@@ -6,4 +6,6 @@ IG_UI_PL = {
     IGUI_TBC_light_1 = "Ktoś ma ogień?",
     IGUI_TBC_light_2 = "Gdzie wsadziłem te pieprzone zapałki?",
     IGUI_TBC_light_3 = "Te umarlaki noszą ze sobą zapalniczki, muszę poszukać...",
+
+    IGUI_TBC_close_modal = "[... Anuluj ...]"
 }

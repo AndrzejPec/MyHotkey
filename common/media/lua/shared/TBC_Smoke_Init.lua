@@ -38,13 +38,20 @@ TBC.cigarettes = {
     [21] = "NnC.CanPipeAK",
     [22] = "NnC.CanPipeNorthernLights",
     [23] = "NnC.CanPipeSourDiesel",
+    [21] = "NnC.SmokingPipeAK",
+    [22] = "NnC.SmokingPipeNorthernLights",
+    [23] = "NnC.SmokingPipeSourDiesel",
+    -- three items not yet present in the mod, but probably coming
+    [24] = "NnC.GlassSmokingPipeAK",
+    [25] = "NnC.GlassSmokingPipeNorthernLights",
+    [26] = "NnC.GlassSmokingPipeSourDiesel",
     -- Mod Hemp & Tobacco smokeable items
-    [24] = "Base.CanPipe_Hemp",
-    [25] = "Base.HempCigarillo",
-    [26] = "Base.HempCigar",
-    [27] = "Base.GlassSmokingPipe_Hemp",
-    [28] = "Base.HempCigarette",
-    [29] = "Base.SmokingPipe_Hemp",
+    [27] = "Base.CanPipe_Hemp",
+    [28] = "Base.HempCigarillo",
+    [29] = "Base.HempCigar",
+    [30] = "Base.GlassSmokingPipe_Hemp",
+    [31] = "Base.HempCigarette",
+    [32] = "Base.SmokingPipe_Hemp",
 }
 
 TBC.Drugs = {
