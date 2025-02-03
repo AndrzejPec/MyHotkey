@@ -29,6 +29,10 @@ local lightDialogues = {
     [3] = getText("IGUI_TBC_light_3"),
 }
 
+local packedDialogues = function(count)
+    return getText("IGUI_TBC_packed_prefix") .. count .. getText("IGUI_TBC_packed_suffix")
+end
+
 local CLOSE_BTN_OFFSET = 15
 
 function TBC.getFirstItem(dictionary, inv, smokingItemType)
@@ -180,7 +184,7 @@ TBC.smokeTobacco = function()
         if #availableCigarettesPack == 0 then
             player:Say(cigarettesDialogues[dialogueNo])
         else
-            player:Say("I've got " .. #availableCigarettesPack .. " (different) pack(s) in my inventory. I need to unpack one first.")
+            player:Say(packedDialogues(#availableCigarettesPack))
         end
         return
     end

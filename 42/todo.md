@@ -1,6 +1,0 @@
-- include smokable items from the mod hemp & narcotics
-- change the words for when you've got cigs, but unpacked
-- let there be polish translation for the say of player
-- prevent spamming modal window
-- make the lighter go back to the container of origin
-- allow for return of the chew to the container of origin
