@@ -63,7 +63,7 @@ function MySmokingModal:create()
     local player = getPlayer()
     local inv = player:getInventory()
     local smokingItemsForModal = TBC.getAllItems(TBC.cigarettes, inv)
-    if not smokingItemsForModal then
+    if #smokingItemsForModal == 0 then
         print("[ERROR] Nie znaleziono przedmiotów do palenia.")
         return
     end
@@ -171,17 +171,16 @@ end
 TBC.smokeTobacco = function()
     local player = getPlayer()
     local inv = player:getInventory()
-    local fireSourceContainer
-    local dialogueNo = ZombRand(3) + 1
+    local dialogueNo = ZombRand(#cigarettesDialogues) + 1
 
     local availableSmokingItems = TBC.getAllItems(TBC.cigarettes, inv)
     local availableCigarettesPack = TBC.getAllItems(TBC.cigarettesPacks, inv)
 
-    if not availableSmokingItems then
-        if availableCigarettesPack == 0 then
+    if #availableSmokingItems == 0 then
+        if #availableCigarettesPack == 0 then
             player:Say(cigarettesDialogues[dialogueNo])
         else
-            player:Say("I've got #availableCigarettesPack in my inv, I have to manually unpack any of them first.")
+            player:Say("I've got " .. #availableCigarettesPack .. " (different) pack(s) in my inventory. I need to unpack one first.")
         end
         return
     end
@@ -189,7 +188,6 @@ TBC.smokeTobacco = function()
     local fireSource = TBC.getFirstItem(TBC.fireSources, inv)
     if not fireSource then
         print("[DEBUG] Brak zapalniczki lub źródła ognia!")
-        local dialogueNo = ZombRand(3) + 1
         player:Say(lightDialogues[dialogueNo])
         return
     end
@@ -201,8 +199,8 @@ TBC.smokeTobacco = function()
     elseif #availableSmokingItems == 1 then
         local cigarette = availableSmokingItems[1]
         if cigarette then
-            local sourceContainer = cigarette:getContainer()
             ISInventoryPaneContextMenu.eatItem(cigarette, 1, 0)
+            -- local sourceContainer = cigarette:getContainer()
             -- local transferSnusBack = ISInventoryTransferAction:new(player, item, inv, sourceContainer)
             -- ISTimedActionQueue.add(transferSnusBack)
             -- TBC.TransferItemsBack(cigarette)
@@ -210,7 +208,6 @@ TBC.smokeTobacco = function()
         end
     else
     print("[DEBUG] Brak przedmiotów do palenia!")
-        local dialogueNo = ZombRand(3) + 1
         player:Say(cigarettesDialogues[dialogueNo])
     end
 end     

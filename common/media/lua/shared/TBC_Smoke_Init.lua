@@ -6,7 +6,8 @@ TBC.fireSources = {
     [2] = "Base.LighterDisposable",
     [3] = "Base.Matches",
     [4] = "Base.Matchbox",
-    [5] = "Base.CandleLit",
+    [5] = "Base.LighterBBQ",
+    [6] = "Base.CandleLit",
     -- [6] = "Base.Lantern_HurricaneLit", -- the game won't let to use this item to light cigarettes
     -- although I disagree, it's flame after all, but I go with the game's decision
 }
@@ -52,6 +53,8 @@ TBC.cigarettes = {
     [30] = "Base.GlassSmokingPipe_Hemp",
     [31] = "Base.HempCigarette",
     [32] = "Base.SmokingPipe_Hemp",
+    -- Mod Cluvius Crack Cigarettes items
+    [33] = "CVCrackCigs.CrackCigSingle",
 }
 
 TBC.Drugs = {
