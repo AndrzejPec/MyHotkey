@@ -1,8 +1,10 @@
-name=[B42] My Tobacco - Hotkey mod
+name=[B42] Tobacco Hotkey Mod - dev
 description=Assign hotkey to smoke/chew tobacco.
 poster=poster.png
 id=myTobaccoHotkeyModDevelop
 icon=icon.png
+homepage=https://github.com/AndrzejPec/MyHotkey
 author=pimatstudio (Andrzej Pec)
 versionMin=42.2.0
-modversion=1.1
+modversion=1.2
+incompatibleWith=\RicksMLC_Cutlery
