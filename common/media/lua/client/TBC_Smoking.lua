@@ -29,8 +29,6 @@ local lightDialogues = {
     [3] = getText("IGUI_TBC_light_3"),
 }
 
-local isSmokingModalOpen = false
-
 function TBC.getFirstItem(dictionary, inv, smokingItemType)
     local output
     for i, fullType in pairs(dictionary) do
@@ -119,14 +117,15 @@ function MySmokingModal:onOptionSelected(smokingItem)
         print("[ERROR] Nieprawidłowy przedmiot lub brak metody getFullType!")
     end
 
+    -- isSmokingModalOpen = false
     self:onClose()
 end
 
 function MySmokingModal:onClose()
-    isSmokingModalOpen = false
-    print("isSmokingModalOpen set to false, closing modal...")
+    -- isSmokingModalOpen = false
     self:setVisible(false)
     self:removeFromUIManager()
+    MySmokingModal.instance = nil
 end
 
 function MySmokingModal:new(x, y, width, height)
@@ -141,10 +140,19 @@ function MySmokingModal:new(x, y, width, height)
     return o
 end
 
-function OpenMySmokingModal()
+-- local isSmokingModalOpen = false
 
-    isSmokingModalOpen = true
-    print("isSmokingModalOpen set to true, opening modal...")
+function OpenMySmokingModal()
+    -- if isSmokingModalOpen then
+    --     print("[DEBUG] Modal jest już otwarty! Nie otwieram kolejnego.")
+    --     return
+    -- end
+    if MySmokingModal.instance then
+        print("[DEBUG] Modal jest już otwarty! Nie otwieram kolejnego.")
+        return
+    end
+
+    -- isSmokingModalOpen = true
 
     local screenWidth = getCore():getScreenWidth()
     local screenHeight = getCore():getScreenHeight()
@@ -198,16 +206,3 @@ TBC.smokeTobacco = function()
         player:Say(cigarettesDialogues[dialogueNo])
     end
 end     
-
-function checkModalOpen()
-    if isSmokingModalOpen then
-        print("[DEBUG:isSmokingModalOpen] Modal jest już otwarty!")
-    else
-        print("[DEBUG:isSmokingModalOpen] Modal NIE jest otwarty.")
-    end
-    if MySmokingModal and MySmokingModal:getIsVisible() then
-        print("[MySmokingModal:getIsVisible()] Modal jest otwarty.")
-    else
-        print("[MySmokingModal:getIsVisible()] Modal NIE jest otwarty.")
-    end
-end
