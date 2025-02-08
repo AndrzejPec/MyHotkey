@@ -1,5 +1,6 @@
 UI_PL = {
-    UI_optionscreen_binding_tobaccoMod="Mod: Tytoń",
+    UI_optionscreen_binding_tobaccoMod="Mod: Tytoń - Hotkey",
     UI_optionscreen_binding_putTobaccoInLip="Zażyj snusa (tytoń do żucia)",
     UI_optionscreen_binding_smokeTobacco="Zapal tytoń",
+    UI_optionscreen_binding_openSmokingRadial="Otwórz kołowe menu dla palenia",
 }

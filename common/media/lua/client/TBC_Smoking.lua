@@ -5,18 +5,6 @@ require "TimedActions/ISEatFoodAction"
 
 local ISEatFoodAction = require("TimedActions/ISEatFoodAction")
 
--- local cigarettesDialogues = {
---     [1] = "I'd like to smoke so badly! If only I had some cigs...!",
---     [2] = "I lost my fags again?! Goddamn it!",
---     [3] = "A fag! A fag! My kingdom for a fag!"
--- }
-
--- local lightDialogues = {
---     [1] = "Anybody got light?",
---     [2] = "Where are my matches?",
---     [3] = "Gotta search some corpses for a lighter..."
--- }
-
 local cigarettesDialogues = {
     [1] = getText("IGUI_TBC_cigarettes_1"),
     [2] = getText("IGUI_TBC_cigarettes_2"),

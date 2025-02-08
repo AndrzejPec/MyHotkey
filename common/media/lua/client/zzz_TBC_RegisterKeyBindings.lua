@@ -2,13 +2,18 @@ TBC = TBC or {}
 
 TBC.keyConfigs = {
     putTobaccoInLip = {
-        displayName = getText("UI_TBC_optionscreen_binding_putTobaccoInLip"),
+        displayName = getText("UI_optionscreen_binding_putTobaccoInLip"),
         action = TBC.putTobaccoInLip,
         keyCode = Keyboard.KEY_NONE
     },
     smokeTobacco = {
-        displayName = getText("UI_TBC_optionscreen_binding_smokeTobacco"),
+        displayName = getText("UI_optionscreen_binding_smokeTobacco"),
         action = TBC.smokeTobacco,
+        keyCode = Keyboard.KEY_NONE
+    },
+    openSmokingRadial = {
+        displayName = getText("UI_optionscreen_binding_openSmokingRadial"),
+        action = TBC.openSmokingRadial,
         keyCode = Keyboard.KEY_NONE
     },
     -- sitOnTheGround = {
