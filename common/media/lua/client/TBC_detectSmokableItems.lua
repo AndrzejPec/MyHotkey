@@ -91,39 +91,231 @@ TBC.cigarettes = {
     [82] = "SupportCorps.StreetJointRolled",
 }
 
--- function TBC:scanForSmokableItems()
---     local allItems = getScriptManager():getAllItems()
---     if not allItems then return end
-
---     local nextIndex = #self.cigarettes + 1 -- Licznik nowych pozycji
-
---     print("🔍 Skanuję przedmioty w poszukiwaniu smokable items...")
-    
---     if type(allItems) ~= "table" then
---         print("❌ Błąd: getScriptManager():getAllItems() nie zwróciło tabeli!")
+-- function TBC:scanForSmokableItemsInInventory()
+--     local player = getPlayer()
+--     if not player then
+--         print("❌ Błąd: Nie znaleziono gracza!")
 --         return
 --     end
 
---     for _, item in pairs(allItems) do
---         local properties = item:getModData()
---         if properties then
---             local isSmokable = false
+--     local inventory = player:getInventory()
+--     if not inventory then
+--         print("❌ Błąd: Gracz nie ma ekwipunku? Coś tu nie gra!")
+--         return
+--     end
 
---             if properties.OnEat then
+--     local allItems = inventory:getItems()
+--     if not allItems or allItems:size() == 0 then
+--         print("📭 Ekwipunek pusty, nic do skanowania!")
+--         return
+--     end
+
+--     print("📌 Znaleziono " .. allItems:size() .. " przedmiotów w ekwipunku!")
+
+--     for i = 1, allItems:size() do
+--         local item = allItems:get(i-1)
+--         if item then
+--             local scriptItem = item:getScriptItem()
+--             if scriptItem then
+--                 local eatType = scriptItem:getEatType()
+--                 if eatType then
+--                     print("🍽️ Przedmiot " .. item:getName() .. " ma EatType: " .. eatType)
+--                     -- Dodatkowa logika dla przedmiotów z określonym EatType
+--                 else
+--                     print("🔹 Przedmiot " .. item:getName() .. " nie ma zdefiniowanego EatType.")
+--                 end
+--             else
+--                 print("⛔ Przedmiot " .. item:getName() .. " nie ma skryptu, pomijam.")
+--             end
+--         else
+--             print("⚠️ Przedmiot na indeksie " .. (i-1) .. " jest nil, pomijam.")
+--         end
+--     end
+-- end
+
+
+function TBC:scanWithFactory()
+    local allItems = getScriptManager():getAllItems()
+
+    if not allItems then
+        print("❌ Błąd: getScriptManager():getAllItems() zwróciło `nil`!")
+        return
+    end
+
+    local itemCount = allItems:size()
+    print("📌 Znaleziono " .. itemCount .. " przedmiotów w grze!")
+
+    for i = 1, itemCount do
+        local item = allItems:get(i - 1)
+
+        if item then
+            local fullType = item:getFullName()
+            local inventoryItem = instanceItem(fullType)
+            local itemType = item:getTypeString()
+
+            if itemType == "Food" then
+                if inventoryItem then
+                    local onEat = inventoryItem:getOnEat()
+                    if onEat and string.find(onEat, "Cigar") then
+                        print("🚬 Przedmiot \"" .. inventoryItem:getName() .. "\" ma OnEat zawierające 'Cigar'.")
+                        -- Dodatkowa logika dla znalezionych przedmiotów
+                    end
+                else
+                    print("⚠️ Nie udało się utworzyć InventoryItem dla: " .. fullType)
+                end
+            end
+        else
+            print("⚠️ Przedmiot na indeksie " .. (i - 1) .. " jest nil, pomijam.")
+        end
+    end
+end
+    
+
+
+function TBC:scanForCigaretteItems()
+    local allItems = getScriptManager():getAllItems()
+
+    if not allItems then
+        print("❌ Błąd: getScriptManager():getAllItems() zwróciło `nil`!")
+        return
+    end
+
+    local itemCount = allItems:size()
+    print("📌 Znaleziono " .. itemCount .. " przedmiotów w grze!")
+
+    for i = 0, itemCount - 1 do
+        local item = allItems:get(i)
+        local isSmokable = false
+
+        if item then
+            -- local eatType = item:getEatType()
+            -- if eatType and eatType == "Cigarettes" then
+            --     local itemName = item:getName() or "Brak nazwy"
+            --     print("🚬 Przedmiot \"" .. itemName .. "\" ma EatType ustawione na 'Cigarettes'.")
+            --     -- Tutaj możesz dodać dodatkową logikę dla znalezionych przedmiotów
+            -- end
+            -- local tags = item:getTags()
+            -- if tags and tags:contains("Smokable") then
+            --     isSmokable = true
+            --     print("🚬 Przedmiot \"" .. item:getName() .. "\" posiada tag 'Smokable'.")
+            -- end
+            -- local itemType = item:getTypeString()
+            -- local scriptItem = item:getScriptItem()
+
+            -- if scriptItem:getOnEat() then
+            --     local onEat = item:getOnEat()
+            --     print(item:getFullType())
+            -- end
+            -- if itemType == "Food" and item:getOnEat() and string.find(onEat, "Cigar") then
+            --     local onEat = item:getOnEat()
+            --     if onEat and string.find(onEat, "Cigar") then
+            --         print("🚬 Przedmiot \"" .. item:getName() .. "\" ma OnEat ustawione na '" .. onEat .. "' i jest typu 'Food'.")
+            --         -- Tutaj możesz dodać dodatkową logikę dla znalezionych przedmiotów
+            --     end
+            -- end
+        else
+            print("⚠️ Przedmiot na indeksie " .. i .. " jest nil, pomijam.")
+        end
+    end
+end
+
+
+
+-- function TBC:scanForSmokableItems()
+--     local player = getPlayer()
+--     if not player then
+--         print("❌ Błąd: Nie znaleziono gracza!")
+--         return
+--     end
+
+--     local inventory = player:getInventory()
+--     if not inventory then
+--         print("❌ Błąd: Gracz nie ma ekwipunku? Coś tu nie gra!")
+--         return
+--     end
+
+--     local allItems = inventory:getItems()
+--     if not allItems or allItems:size() == 0 then
+--         print("📭 Ekwipunek pusty, nic do skanowania!")
+--         return
+--     end
+
+--     print("📌 Znaleziono " .. allItems:size() .. " przedmiotów w ekwipunku!")
+
+--     for i = 1, allItems:size() do
+--         local item = allItems:get(i - 1)
+--         if item then
+--             local scriptItem = item:getScriptItem()
+--             if scriptItem then
+--                 local itemType = scriptItem:getType()
+--                 print(itemType)
+--                 if itemType == "Food" then
+--                     print("🍎 Przedmiot " .. item:getName() .. " jest typu Food.")
+--                     -- Dodatkowa logika dla przedmiotów typu Food
+--                 else
+--                     print("🔹 Przedmiot " .. item:getName() .. " nie jest typu Food. Typ: " .. itemType)
+--                 end
+--             else
+--                 print("⚠️ Przedmiot " .. item:getName() .. " nie ma skryptu, pomijam.")
+--             end
+--         else
+--             print("⚠️ Przedmiot na indeksie " .. (i - 1) .. " jest nil, pomijam.")
+--         end
+--     end
+-- end
+
+
+-- function TBC:scanForSmokableItems()
+--     local player = getPlayer()
+--     if not player then
+--         print("❌ Błąd: Nie znaleziono gracza!")
+--         return
+--     end
+
+--     local inventory = player:getInventory()
+--     if not inventory then
+--         print("❌ Błąd: Nie znaleziono ekwipunku gracza!")
+--         return
+--     end
+
+--     local allItems = inventory:getItems()
+--     local itemCount = allItems:size()
+--     print("📌 Znaleziono " .. itemCount .. " przedmiotów w ekwipunku gracza!")
+
+--     local nextIndex = #self.cigarettes + 1 -- Licznik nowych pozycji
+
+--     for i = 0, itemCount - 1 do
+--         local item = allItems:get(i)
+
+--         if item then
+--             local fullType = item:getFullType()
+--             local properties = item:getModData()
+--             local isSmokable = false
+--             local itemType = item:getType()
+--             print('Item' .. fullType .. ' ma typ ' .. itemType)
+
+--             if item:getEatType() then
+--                 local eatType = item:getEatType()
+--                 print('Zaś jego eattype jest ' .. eatType)
+--             end
+--             -- Sprawdzenie właściwości OnEat
+--             if properties and properties.OnEat then
 --                 local onEat = string.lower(properties.OnEat)
 --                 if string.find(onEat, "cigar", 1, true) or string.find(onEat, "weed", 1, true) then
 --                     isSmokable = true
 --                 end
 --             end
 
---             if not isSmokable and properties.EatType then
+--             -- Sprawdzenie właściwości EatType
+--             if not isSmokable and properties and properties.EatType then
 --                 local eatType = properties.EatType
 --                 if eatType == "pipe" or eatType == "Cigarettes" then
 --                     isSmokable = true
 --                 end
 --             end
 
---             if not isSmokable and properties.Tags then
+--             -- Sprawdzenie tagów
+--             if not isSmokable and properties and properties.Tags then
 --                 local tags = properties.Tags:split(";")
 --                 for _, tag in ipairs(tags) do
 --                     if tag == "Smokable" then
@@ -133,21 +325,9 @@ TBC.cigarettes = {
 --                 end
 --             end
 
---             -- Wykluczamy produkty do żucia (jeśli już oznaczyliśmy jako smokable)
---             -- if isSmokable and properties.Tags then
---             --     local tags = properties.Tags:split(";")
---             --     for _, tag in ipairs(tags) do
---             --         if tag == "ChewingTobacco" then
---             --             isSmokable = false
---             --             break
---             --         end
---             --     end
---             -- end
-
+--             -- Dodanie do listy, jeśli nie istnieje
 --             if isSmokable then
---                 local fullType = item:getFullType()
 --                 local exists = false
-
 --                 for _, v in pairs(self.cigarettes) do
 --                     if v == fullType then
 --                         exists = true
@@ -162,118 +342,15 @@ TBC.cigarettes = {
 --                 else
 --                     print("⚠️ Już istnieje: " .. fullType)
 --                 end
-
---                 -- Dodatkowy debug print: sprawdzamy, jaki jest fullType
---                 print("ℹ️ Pełny typ przedmiotu: " .. fullType)
 --             end
 --         end
 --     end
 
---     print("✅ Skrypt zakończony! Wykryto " .. #self.cigarettes .. " smokable items.")
+--     print("✅ Skrypt zakończony! Wykryto " .. #self.cigarettes .. " smokable items w ekwipunku gracza.")
 -- end
 
-function TBC:scanForSmokableItems()
-    local player = getPlayer()
-    if not player then
-        print("❌ Błąd: Nie znaleziono gracza!")
-        return
-    end
 
-    local inventory = player:getInventory()
-    if not inventory then
-        print("❌ Błąd: Gracz nie ma ekwipunku? Coś tu nie gra!")
-        return
-    end
 
-    local allItems = inventory:getItems()
-
-    if not allItems or allItems:size() == 0 then
-        print("📭 Ekwipunek pusty, nic do skanowania!")
-        return
-    end
-
-    print("📌 Znaleziono " .. allItems:size() .. " przedmiotów w ekwipunku!")
-
-    local nextIndex = #self.cigarettes + 1 
-
-    for i = 1, allItems:size() do
-        local item = allItems:get(i-1) 
-        print('🛠 Procesowany AJTEM namber ' .. i)
-
-        if not item then
-            print('⚠️ Item jest nil, pomijam!')
-            -- Przechodzimy do następnego przedmiotu
-            goto continue
-        end
-
-        local fullType = item:getFullType()
-        print('📦 Fulltajp ajtema: ' .. fullType)
-
-        local properties = item:getModData()
-        if not properties then
-            print('⛔ Ajtem nie ma PROPERTISUW, pomijam.')
-            -- Pomijamy przedmiot
-            goto continue
-        end
-
-        local isSmokable = false
-
-        -- Sprawdzamy czy item ma właściwość OnEat sugerującą, że jest do palenia
-        if properties.OnEat then
-            local onEat = string.lower(properties.OnEat)
-            if string.find(onEat, "cigar", 1, true) or string.find(onEat, "weed", 1, true) then
-                isSmokable = true
-            end
-        end
-
-        -- Sprawdzamy czy to fajki lub fajki wodne
-        if not isSmokable and properties.EatType then
-            local eatType = properties.EatType
-            if eatType == "pipe" or eatType == "Cigarettes" then
-                isSmokable = true
-            end
-        end
-
-        -- Sprawdzamy tagi
-        if not isSmokable and properties.Tags then
-            local tags = properties.Tags:split(";")
-            for _, tag in ipairs(tags) do
-                if tag == "Smokable" then
-                    isSmokable = true
-                    break -- Możemy przerwać pętlę, bo już wiemy, że item jest smokable
-                end
-            end
-        end
-
-        -- Jeśli przedmiot nie jest smokable, pomijamy go
-        if not isSmokable then
-            print("🚫 " .. fullType .. " nie nadaje się do palenia.")
-            goto continue
-        end
-
-        -- Sprawdzamy, czy przedmiot już istnieje na liście
-        local exists = false
-        for _, v in pairs(self.cigarettes) do
-            if v == fullType then
-                exists = true
-                break
-            end
-        end
-
-        if not exists then
-            self.cigarettes[nextIndex] = fullType
-            print("✅ Dodano: " .. fullType)
-            nextIndex = nextIndex + 1
-        else
-            print("⚠️ Już istnieje: " .. fullType)
-        end
-
-        ::continue::
-    end
-
-    print("next-index jest " .. nextIndex .. ", co co co cnie kurwa")
-    print("✅ Skrypt zakończony! Wykryto " .. (#self.cigarettes - 82) .. " smokable items w ekwipunku.")
-end
 
 
 -- if TBC and TBC.scanForSmokableItems then
