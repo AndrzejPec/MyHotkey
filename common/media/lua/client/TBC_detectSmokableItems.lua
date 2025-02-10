@@ -170,7 +170,8 @@ function TBC:scanWithFactory()
     end
 end
     
-function TBC:scanForCigaretteItems()
+function TBC:scanForSmokableItems()
+    local smokables = {}
     local allItems = getScriptManager():getAllItems()
 
     if not allItems then return end
@@ -179,36 +180,58 @@ function TBC:scanForCigaretteItems()
 
     for i = 0, itemCount - 1 do
         local item = allItems:get(i)
+
+        if not item then return end
+        
+        local itemName = item:getName()
         local fullType = item:getFullName()
         local itemType = item:getTypeString()
         local inventoryItem = instanceItem(fullType)
 
         local isSmokable = false
 
-        if not item then return end
-
+        -- Warunek 1: EatType == "Cigarettes"
         local eatType = item:getEatType()
         if eatType and eatType == "Cigarettes" then
-            local itemName = item:getName() or "Brak nazwy"
             print("🚬 Przedmiot \"" .. itemName .. "\" ma EatType ustawione na 'Cigarettes'.")
+            print("🚬 Przedmiot \"" .. itemName .. "\" wpadł na 1. warunku")
+            isSmokable = true
         end
+
+        -- Warunek 2: Przedmiot ma tag "Smokable"
         local tags = item:getTags()
-        if tags and tags:contains("Smokable") then
+        if not isSmokable and tags and tags:contains("Smokable") then
             isSmokable = true
             print("🚬 Przedmiot \"" .. itemName .. "\" posiada tag 'Smokable'.")
+            print("🚬 Przedmiot \"" .. itemName .. "\" wpadł na 2. warunkełe")
         end
-        if itemType == "Food" then
+
+        -- Warunek 3 i 4: OnEat lub CustomContextMenu zawiera odpowiednie frazy
+        if not isSmokable and itemType == "Food" then
             if inventoryItem then
                 local onEat = inventoryItem:getOnEat()
+
                 if onEat and string.find(onEat, "Cigar") then
-                    print("🚬 Przedmiot \"" .. inventoryItem:getName() .. "\" ma OnEat zawierające 'Cigar'.")
-                    -- Dodatkowa logika dla znalezionych przedmiotów
+                    print("🚬 Przedmiot \"" .. itemName .. "\" ma OnEat zawierające 'Cigar'.")
+                    print("🚬 Przedmiot \"" .. itemName .. "\" wpadł na 3. warunkszfiucie")
                 end
-            else
-                print("⚠️ Nie udało się utworzyć InventoryItem dla: " .. fullType)
+
+                local customContextMenu = inventoryItem:CustomContextMenu()
+                
+                if not isSmokable and customContextMenu and string.find(customContextMenu, "Smoke") then
+                    print("🚬 Przedmiot \"" .. itemName .. "\" ma CustomContextMenu zawierające 'Smoke'.")
+                    print("🚬 Przedmiot \"" .. itemName .. "\" wpadł na 4. warunkszfiutsenie")
+                end
             end
         end
+
+        if isSmokable then
+            table.insert(smokables, item)
+        end
     end
+    print('Łonczna liczba wykrytych SMOŁKABULSÓW wynosi ' .. #smokables)
+
+    return smokables
 end
 
 -- I've developed an algorithm that should ensure - more or less - an future-proof - further or shorter - onward compatibility with mods that would be created in the future. After having added manually nearly a 100 items introduced by differnt mods that I'd decided to support (on top of all the items from the base game) I kind of grew tired with all the labour it took to keep the existing dictionary of smokable items up to date with what modders every now and then add to the game. And so...
@@ -219,9 +242,32 @@ end
 -- - have the OnEat function value represented by a string containing substring "cigar" (like OnEat_Cigarette, OnEat_Cigarillo...) "weed" or "smoke" (again, case insensitive)
 -- - and lastly, if the item is not caught by any of nets above, it has to have CustomContextMenu property be of value "Smoke" (and yet again out of my generosity, I'm leaving this still case insensitive ;))
 
--- In case I abandon the development/patching of my mod(s) I give full permission to anyone willing to pick up the code after me, feel free to carry on, albeit with a different name. I plan on leaving a note in the description if that time comes, but who knows what the future brings. So just in case I'm leaving this note here. 
+-- In case I abandon the development/patching of my mod(s) I give full permission to anyone willing to pick up the code after me, feel free to carry on, albeit with a different name. I plan on leaving a note in the description if that time comes, but who knows what the future brings. So just in case I'm leaving this note here.
 
 
+-- If you're not in the mood and want to go straight to the fix without learning a valuable lesson, head over to the point 10 straight away, otherwise...
+
+-- 1. you download [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2289454303&searchtext=eggon]this mod[/url]
+-- 2. you are being confused by the fact I've just sent you a link to the mod you were asking me to fix, but you just subscribe to it and you keep reading ;)
+-- 3. you follow the mod's download folder - it should be something like this: C:\Program Files (x86)\Steam\steamapps\workshop\content\108600\2289454303\mods\eggonsHotkeys
+-- 4. you are looking at the contents of the folder and you are seeing in it a folder named "media" and two other files
+-- 5. you feel the powers of the divine creator and thus you are creating two folders named exactly:
+-- - "42" (which BTW is the answer to the greatest question about the very "nature of the universe", no joke, it is, google it :P)
+-- - "common"
+-- (so theres 3 folders - media, 42 and common, + 2 files
+-- 6. you move the folder media + 2 of the files in any of the other folders (either 42 or common, it should not matter, and just trust me, it really does not :D)
+-- 7. you launch pacman... i mean project zomboid
+-- 7.5 when game's launching you repeat "abracadabra" 3x (it's crucial!)
+-- 8. you go into mods -> there should be eggon's hotkey mod for you to select and run :)
+-- 9. if you followed my guidance you should be able to use the mod just the same like you could when you had B41
+-- 10. What if following my meticulously written tutorial does not get the mod to work? No worries, someone else did that exact process already and uploaded the outcome here:
+-- https://steamcommunity.com/sharedfiles/filedetails/?id=3391426402&searchtext=eggon
+
+-- You're welcome. As a thank you, I only accept sums not smaller than 1 BTC, my wallet address is... just kidding, but srsly I'm in a foolish mood today, as I'm sure you've noticed already :D
+-- And to be honest no need for thank you's but it'd be great to have a word of feedback about the mod of mine - at least if you're finding the radial or the modal menu to be more convenient in my mod? I added the radials just a couple days ago actually. I personally preffer the modal window really. But curious how you find it?
+-- Hope you chose the path of the enlightened player and completed my guide :D but it's also fine if you skipped to the fix itself ^^
+
+-- From what I'm seeing it's the middle of the night in USA now, so I hope you'll have a great day :) 
 -- function TBC:scanForSmokableItems()
 --     local player = getPlayer()
 --     if not player then
