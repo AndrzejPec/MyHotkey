@@ -7,3 +7,10 @@ TBC.TransferItemsBack = function(item)
     local transferItemBack = ISInventoryTransferAction:new(player, item, inv, sourceContainer)
     ISTimedActionQueue.add(transferItemBack)
 end
+
+TBC:getInv = function()
+    local player = getPlayer()
+    local inv = player:getInventory()
+
+    return inv
+end
