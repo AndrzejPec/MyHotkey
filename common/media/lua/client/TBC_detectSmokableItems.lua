@@ -212,13 +212,15 @@ function TBC:scanForSmokableItems()
                 local onEat = inventoryItem:getOnEat()
 
                 if onEat and string.find(onEat, "Cigar") then
+                    isSmokable = true
                     print("🚬 Przedmiot \"" .. itemName .. "\" ma OnEat zawierające 'Cigar'.")
                     print("🚬 Przedmiot \"" .. itemName .. "\" wpadł na 3. warunkszfiucie")
                 end
 
-                local customContextMenu = inventoryItem:CustomContextMenu()
+                local customContextMenu = inventoryItem.CustomContextMenu
                 
                 if not isSmokable and customContextMenu and string.find(customContextMenu, "Smoke") then
+                    isSmokable = true
                     print("🚬 Przedmiot \"" .. itemName .. "\" ma CustomContextMenu zawierające 'Smoke'.")
                     print("🚬 Przedmiot \"" .. itemName .. "\" wpadł na 4. warunkszfiutsenie")
                 end
