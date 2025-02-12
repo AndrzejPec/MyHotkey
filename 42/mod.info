@@ -6,5 +6,5 @@ icon=icon.png
 url=https://github.com/AndrzejPec/MyHotkey
 author=pimatstudio (Andrzej Pec)
 versionMin=42.2.0
-modversion=1.3
+modversion=1.3.1
 incompatible=\RicksMLC_Cutlery

@@ -223,10 +223,10 @@ function TBC:detectSmokableItems()
 
     local newItemCount = (#self.cigarettes - initialSmokableItemsCount)
 
-    print('Smokable items count: ' .. #self.cigarettes .. ', there were ' .. newItemCount .. ' added to the list.')
+    print('[Tobacco+ Hotkey] Smokable items count: ' .. #self.cigarettes .. ', there were ' .. newItemCount .. ' added to the list.')
 end
 
 Events.OnGameStart.Add(function()
-    print("Detecting smokable items on game start...")
+    print("[Tobacco+ Hotkey] Detecting smokable items on game start...")
     TBC:detectSmokableItems()
 end)
