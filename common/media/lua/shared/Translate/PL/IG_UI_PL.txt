@@ -1,14 +1,6 @@
 IG_UI_PL = {
-    IGUI_TBC_cigarettes_1 = "A niech to gęś kopnie, nie mam fajków, a tak mi się chce jarać...!",
-    IGUI_TBC_cigarettes_2 = "Do stu tysięcy beczek marynowanych śledzi! Znowu posiałem gdzieś fajki!",
-    IGUI_TBC_cigarettes_3 = "A niech mnie kule biją, gdzie te fajki?!",
-
-    IGUI_TBC_light_1 = "Ktoś ma ogień?",
-    IGUI_TBC_light_2 = "Gdzie wsadziłem te pieprzone zapałki?",
-    IGUI_TBC_light_3 = "Te umarlaki noszą ze sobą zapalniczki, muszę poszukać...",
-
     IGUI_TBC_packed_prefix = "Mam ",
     IGUI_TBC_packed_suffix = " paczkę/paczki fajek w ekwipunku. Muszę najpierw ręcznie którąś odpakować.",
 
-    IGUI_TBC_close_modal = "[... Anuluj ...]"
+    IGUI_TBC_close_modal = "[ ... Anuluj ... ]"
 }
