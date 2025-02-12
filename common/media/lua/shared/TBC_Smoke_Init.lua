@@ -215,7 +215,7 @@ function TBC:detectSmokableItems()
         end
 
         local customContextMenu = inventoryItem.CustomContextMenu
-        if customContextMenu and string.find(customContextMenu, "Smoke") then
+        if type(customContextMenu) == "string" and string.find(customContextMenu, "Smoke") then
             self:addItemToDictionary(fullType)
             print("Przedmiot " .. itemName .. " ma CustomContextMenu zawierajonce: " .. customContextMenu)
         end
@@ -224,3 +224,16 @@ function TBC:detectSmokableItems()
     end
     print('Lonczna liczba wykrytych SMOŁKABULSOW wynosi ' .. #self.cigarettes)
 end
+
+local function waitForItemsToLoad()
+    local allItems = getScriptManager():getAllItems()
+
+    if allItems and allItems:size() > 0 then
+        TBC:detectSmokableItems()
+        Events.OnTick.Remove(waitForItemsToLoad)
+    end
+end
+
+Events.OnLoad.Add(function()
+    Events.OnTick.Add(waitForItemsToLoad)
+end)
