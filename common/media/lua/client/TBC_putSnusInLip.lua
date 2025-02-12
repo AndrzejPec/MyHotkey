@@ -61,7 +61,7 @@ function MyCustomModal:onOptionSelected(button)
         -- print(string.format("[DEBUG] Wybrano SNUS: %s (Typ: %s)", snus:getName(), snus:getFullType()))
         TBC.putSelectedSNUSInLip(snus)
     else
-        print("[DEBUG] Zamykam okno modalne.")
+        -- print("[DEBUG] Zamykam okno modalne.")
     end
     self:onClose()
 end
@@ -114,24 +114,13 @@ local SNUSDialogues = {
 }
 
 function TBC.getAllItems(dictionary, inv)
-    print("[DEBUG] Rozpoczynam skanowanie inwentarza dla SNUS...")
-
     local items = {}
     for index, fullType in pairs(dictionary) do
-        -- print(string.format("[DEBUG] Sprawdzam typ SNUS: %s", tostring(fullType)))
 
         local foundItem = inv:getFirstTypeRecurse(fullType)
         if foundItem then
-            -- print(string.format("[DEBUG] Znaleziono przedmiot: %s", foundItem:getFullType()))
             table.insert(items, foundItem)
-        else
-            -- print(string.format("[WARNING] Nie znaleziono przedmiotu dla typu: %s", tostring(fullType)))
         end
-    end
-
-    -- print(string.format("[DEBUG] Skanowanie zakończone. Liczba znalezionych SNUS: %d", #items))
-    for i, item in ipairs(items) do
-        print(string.format("[DEBUG] Element #%d w items: %s", i, tostring(item)))
     end
 
     return items

@@ -13,6 +13,7 @@ TBC.fireSources = {
     [4] = "Base.Matchbox",
     [5] = "Base.LighterBBQ",
     [6] = "Base.CandleLit",
+    [7] = "HGO.HGOLighterBBQ"
     -- [6] = "Base.Lantern_HurricaneLit", -- the game won't let to use this item to light cigarettes
     -- although I disagree, it's flame after all, but I go with the game's decision
 }
@@ -175,15 +176,21 @@ function TBC:addItemToDictionary(item)
 end
 
 function TBC:detectSmokableItems()
+    if not getPlayer() then
+        return
+    end
+
     local allItems = getScriptManager():getAllItems()
-    if not allItems then return end
+    if not allItems then 
+        return
+    end
 
     local itemCount = allItems:size()
+    local initialSmokableItemsCount = #self.cigarettes
 
     for i = 0, itemCount - 1 do
         local item = allItems:get(i)
-
-        if not item then goto continue end
+        if not item then return end
         
         local itemName = item:getName()
         local fullType = item:getFullName()
@@ -191,49 +198,65 @@ function TBC:detectSmokableItems()
 
         local eatType = item:getEatType()
         if eatType and (eatType == "Cigarettes" or eatType == "pipe") then
-            print("Przedmiot " .. itemName .. " wpadl na 1. warunku; jego eatType: " .. eatType)
             self:addItemToDictionary(fullType)
-            goto continue
         end
 
         local tags = item:getTags()
         if tags and tags:contains("Smokable") then
-            print("Przedmiot \"" .. itemName .. "\" wpadl na 2. warunku posiada tag 'Smolkabul'.")
             self:addItemToDictionary(fullType)
-            goto continue
         end
 
         -- we need to spawn an item instance in order to check other conditions since these properties exist for inventoryItem class only
         local inventoryItem = instanceItem(fullType)
-        if not inventoryItem or itemType ~= "Food" then goto continue end
+        if inventoryItem and itemType == "Food" then
+            local onEat = inventoryItem:getOnEat()
+            if onEat and (string.find(onEat, "Cigar") or string.find(onEat, "Weed") or string.find(onEat, "Smoke")) then
+                self:addItemToDictionary(fullType)
+            end
 
-        local onEat = inventoryItem:getOnEat()
-        if onEat and (string.find(onEat, "Cigar") or string.find(onEat, "Weed") or string.find(onEat, "Smoke")) then
-            self:addItemToDictionary(fullType)
-            print("Przedmiot \"" .. itemName .. "\" ma OnEat: " .. onEat)
-            goto continue
+            local customContextMenu = inventoryItem.CustomContextMenu
+            if type(customContextMenu) == "string" and string.find(customContextMenu, "Smoke") then
+                self:addItemToDictionary(fullType)
+            end
         end
-
-        local customContextMenu = inventoryItem.CustomContextMenu
-        if type(customContextMenu) == "string" and string.find(customContextMenu, "Smoke") then
-            self:addItemToDictionary(fullType)
-            print("Przedmiot " .. itemName .. " ma CustomContextMenu zawierajonce: " .. customContextMenu)
-        end
-
-        ::continue::
     end
-    print('Lonczna liczba wykrytych SMOŁKABULSOW wynosi ' .. #self.cigarettes)
+
+    local newItemCount = (#self.cigarettes - initialSmokableItemsCount)
+
+    print('Smokable items count: ' .. #self.cigarettes .. ', there were ' .. newItemCount .. ' added to the list.')
 end
 
-local function waitForItemsToLoad()
-    local allItems = getScriptManager():getAllItems()
-
-    if allItems and allItems:size() > 0 then
-        TBC:detectSmokableItems()
-        Events.OnTick.Remove(waitForItemsToLoad)
-    end
-end
-
-Events.OnLoad.Add(function()
-    Events.OnTick.Add(waitForItemsToLoad)
+Events.OnGameStart.Add(function()
+    print("🔄 Detecting smokable items on game start...")
+    TBC:detectSmokableItems()
 end)
+
+-- local TBC.ModOptionsConfig = {
+--     keyBind   = nil,
+--     checkBox  = nil,
+--     textEntry = nil,
+--     multiBox  = nil,
+--     comboBox  = nil,
+--     colorPick = nil,
+--     slider    = nil,
+--     button    = nil
+-- }
+
+-- local function applyModOptions()
+--     print("Updating smokable items...")
+--     TBC:detectSmokableItems()
+-- end
+
+-- function TBC:initModOptions()
+--     local options = PZAPI.ModOptions:create("myTobaccoHotkeyMod", "Tobacco+ Hotkey")
+
+--     options:addTitle("If there are smokable items that are missing in the modal/radial menu, press this button.")
+--     TBC.ModOptionsConfig.button = options:addButton(
+--         "updateSmokableItems", 
+--         "Update smokable items list", 
+--         "NOTE: You have to be in-game for this option to take effect! If you've not loaded a save, then this will do nothing", 
+--         applyModOptions
+--     )
+-- end
+
+-- TBC:initModOptions()
