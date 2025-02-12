@@ -1,6 +1,14 @@
 UI_PL = {
-    UI_optionscreen_binding_tobaccoMod="Mod: Tytoń - Hotkey",
-    UI_optionscreen_binding_putTobaccoInLip="Zażyj snusa (tytoń do żucia)",
-    UI_optionscreen_binding_smokeTobacco="Zapal tytoń",
-    UI_optionscreen_binding_openSmokingRadial="Otwórz kołowe menu dla palenia",
+    UI_optionscreen_binding_tobaccoMod="Tytoń+ Hotkey",
+    UI_optionscreen_binding_putTobaccoInLip="Zażyj snusa (wybór z menu tekstowego)",
+    UI_optionscreen_binding_smokeTobacco="Zapal tytoń (wybór z menu tekstowego)",
+    UI_optionscreen_binding_openSmokingRadial="Zapal tytoń (wybór z menu kołowego)",
+
+    UI_options_TBC_cigarettes_1_textEntry="Dialog nr 1 (otwórz opcje -> mody i wpisz własny tekst!)",
+    UI_options_TBC_cigarettes_2_textEntry="Dialog nr 2 (otwórz opcje -> mody i wpisz własny tekst!)",
+    UI_options_TBC_cigarettes_3_textEntry="Dialog nr 3 (otwórz opcje -> mody i wpisz własny tekst!)",
+
+    UI_options_TBC_lighter_1_textEntry = "Dialog nr 1 (otwórz opcje -> mody i wpisz własny tekst!)",
+    UI_options_TBC_lighter_2_textEntry = "Dialog nr 2 (otwórz opcje -> mody i wpisz własny tekst!)",
+    UI_options_TBC_lighter_3_textEntry = "Dialog nr 3 (otwórz opcje -> mody i wpisz własny tekst!)",
 }
