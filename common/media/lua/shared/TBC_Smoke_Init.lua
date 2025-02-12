@@ -1,4 +1,9 @@
-EHK = EHK or {}
+--***********************************************************
+--**               ANDRZEJ PEC (pimatstudio)               **
+--**   Definitions of smokable and chewable items          **
+--**   + algorithmic check for new items added by mods     **
+--***********************************************************
+
 TBC = TBC or {}
 
 TBC.fireSources = {
@@ -152,3 +157,70 @@ TBC.validRecipes = {
     ["Take Cigarette"] = true,
     ["Unpack Cigarettes"] = true,
 }
+
+function TBC:containsItem(list, item)
+    if not list then return false end
+
+    for _, v in ipairs(list) do
+        if v == item then return true end
+    end
+
+    return false
+end
+
+function TBC:addItemToDictionary(item)
+    if item and not self:containsItem(self.cigarettes, item) and not self:containsItem(self.SNUS, item) then
+        table.insert(self.cigarettes, item)
+    end
+end
+
+function TBC:detectSmokableItems()
+    local allItems = getScriptManager():getAllItems()
+    if not allItems then return end
+
+    local itemCount = allItems:size()
+
+    for i = 0, itemCount - 1 do
+        local item = allItems:get(i)
+
+        if not item then goto continue end
+        
+        local itemName = item:getName()
+        local fullType = item:getFullName()
+        local itemType = item:getTypeString()
+
+        local eatType = item:getEatType()
+        if eatType and (eatType == "Cigarettes" or eatType == "pipe") then
+            print("Przedmiot " .. itemName .. " wpadl na 1. warunku; jego eatType: " .. eatType)
+            self:addItemToDictionary(fullType)
+            goto continue
+        end
+
+        local tags = item:getTags()
+        if tags and tags:contains("Smokable") then
+            print("Przedmiot \"" .. itemName .. "\" wpadl na 2. warunku posiada tag 'Smolkabul'.")
+            self:addItemToDictionary(fullType)
+            goto continue
+        end
+
+        -- we need to spawn an item instance in order to check other conditions since these properties exist for inventoryItem class only
+        local inventoryItem = instanceItem(fullType)
+        if not inventoryItem or itemType ~= "Food" then goto continue end
+
+        local onEat = inventoryItem:getOnEat()
+        if onEat and (string.find(onEat, "Cigar") or string.find(onEat, "Weed") or string.find(onEat, "Smoke")) then
+            self:addItemToDictionary(fullType)
+            print("Przedmiot \"" .. itemName .. "\" ma OnEat: " .. onEat)
+            goto continue
+        end
+
+        local customContextMenu = inventoryItem.CustomContextMenu
+        if customContextMenu and string.find(customContextMenu, "Smoke") then
+            self:addItemToDictionary(fullType)
+            print("Przedmiot " .. itemName .. " ma CustomContextMenu zawierajonce: " .. customContextMenu)
+        end
+
+        ::continue::
+    end
+    print('Lonczna liczba wykrytych SMOŁKABULSOW wynosi ' .. #self.cigarettes)
+end
