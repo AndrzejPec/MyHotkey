@@ -5,17 +5,22 @@ require "TimedActions/ISEatFoodAction"
 
 local ISEatFoodAction = require("TimedActions/ISEatFoodAction")
 
-local cigarettesDialogues = {
-    [1] = getText("IGUI_TBC_cigarettes_1"),
-    [2] = getText("IGUI_TBC_cigarettes_2"),
-    [3] = getText("IGUI_TBC_cigarettes_3"),
-}
+local cigarettesDialogues = {}
+local lightDialogues = {}
 
-local lightDialogues = {
-    [1] = getText("IGUI_TBC_light_1"),
-    [2] = getText("IGUI_TBC_light_2"),
-    [3] = getText("IGUI_TBC_light_3"),
-}
+local function loadDialogues()
+    local options = PZAPI.ModOptions:getOptions("myTobaccoHotkeyMod")
+    cigarettesDialogues = {
+        [1] = options:getOption("TBC_cigarettes_1"):getValue(),
+        [2] = options:getOption("TBC_cigarettes_2"):getValue(),
+        [3] = options:getOption("TBC_cigarettes_3"):getValue(),
+    }
+    lightDialogues = {
+        [1] = options:getOption("TBC_lighter_1"):getValue(),
+        [2] = options:getOption("TBC_lighter_2"):getValue(),
+        [3] = options:getOption("TBC_lighter_3"):getValue(),
+    }
+end
 
 local packedDialogues = function(count)
     return getText("IGUI_TBC_packed_prefix") .. count .. getText("IGUI_TBC_packed_suffix")
@@ -163,7 +168,10 @@ end
 TBC.smokeTobacco = function()
     local player = getPlayer()
     local inv = player:getInventory()
+    local cigarettesDialogues = getCigarettesDialogues()
+    local lightDialogues = getLightDialogues()
     local dialogueNo = ZombRand(#cigarettesDialogues) + 1
+
 
     local availableSmokingItems = TBC.getAllItems(TBC.cigarettes, inv)
     local availableCigarettesPack = TBC.getAllItems(TBC.cigarettesPacks, inv)
@@ -203,3 +211,5 @@ TBC.smokeTobacco = function()
         player:Say(cigarettesDialogues[dialogueNo])
     end
 end     
+
+Events.OnGameStart.Add(loadDialogues)

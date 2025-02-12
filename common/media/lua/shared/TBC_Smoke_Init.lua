@@ -227,7 +227,7 @@ function TBC:detectSmokableItems()
 end
 
 Events.OnGameStart.Add(function()
-    print("🔄 Detecting smokable items on game start...")
+    print("Detecting smokable items on game start...")
     TBC:detectSmokableItems()
 end)
 
