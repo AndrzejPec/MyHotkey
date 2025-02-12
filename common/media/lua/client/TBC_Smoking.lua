@@ -168,17 +168,14 @@ end
 TBC.smokeTobacco = function()
     local player = getPlayer()
     local inv = player:getInventory()
-    local cigarettesDialogues = getCigarettesDialogues()
-    local lightDialogues = getLightDialogues()
     local dialogueNo = ZombRand(#cigarettesDialogues) + 1
-
 
     local availableSmokingItems = TBC.getAllItems(TBC.cigarettes, inv)
     local availableCigarettesPack = TBC.getAllItems(TBC.cigarettesPacks, inv)
 
     if #availableSmokingItems == 0 then
         if #availableCigarettesPack == 0 then
-            player:Say(cigarettesDialogues[dialogueNo])
+            player:Say(cigarettesDialogues[dialogueNo])  -- Używa już wczytanej wartości!
         else
             player:Say(packedDialogues(#availableCigarettesPack))
         end
@@ -187,29 +184,22 @@ TBC.smokeTobacco = function()
 
     local fireSource = TBC.getFirstItem(TBC.fireSources, inv)
     if not fireSource then
-        -- print("[DEBUG] Brak zapalniczki lub źródła ognia!")
-        player:Say(lightDialogues[dialogueNo])
+        player:Say(lightDialogues[dialogueNo])  -- Używa już wczytanej wartości!
         return
     end
 
     if #availableSmokingItems > 1 then
-        -- print("[DEBUG] Więcej niż jeden przedmiot do palenia. Otwieram modal.")
         OpenMySmokingModal()
         return
     elseif #availableSmokingItems == 1 then
         local cigarette = availableSmokingItems[1]
         if cigarette then
             ISInventoryPaneContextMenu.eatItem(cigarette, 1, 0)
-            -- local sourceContainer = cigarette:getContainer()
-            -- local transferSnusBack = ISInventoryTransferAction:new(player, item, inv, sourceContainer)
-            -- ISTimedActionQueue.add(transferSnusBack)
-            -- TBC.TransferItemsBack(cigarette)
             return
         end
     else
-    -- print("[DEBUG] Brak przedmiotów do palenia!")
-        player:Say(cigarettesDialogues[dialogueNo])
+        player:Say(cigarettesDialogues[dialogueNo])  -- Używa już wczytanej wartości!
     end
-end     
+end
 
 Events.OnGameStart.Add(loadDialogues)
