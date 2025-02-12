@@ -11,5 +11,4 @@ UI_EN = {
     UI_options_TBC_lighter_1_textEntry = "First dialogue",
     UI_options_TBC_lighter_2_textEntry = "Second dialogue",
     UI_options_TBC_lighter_3_textEntry = "Third dialogue",
-    
 }

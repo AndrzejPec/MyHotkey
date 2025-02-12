@@ -230,33 +230,3 @@ Events.OnGameStart.Add(function()
     print("Detecting smokable items on game start...")
     TBC:detectSmokableItems()
 end)
-
--- local TBC.ModOptionsConfig = {
---     keyBind   = nil,
---     checkBox  = nil,
---     textEntry = nil,
---     multiBox  = nil,
---     comboBox  = nil,
---     colorPick = nil,
---     slider    = nil,
---     button    = nil
--- }
-
--- local function applyModOptions()
---     print("Updating smokable items...")
---     TBC:detectSmokableItems()
--- end
-
--- function TBC:initModOptions()
---     local options = PZAPI.ModOptions:create("myTobaccoHotkeyMod", "Tobacco+ Hotkey")
-
---     options:addTitle("If there are smokable items that are missing in the modal/radial menu, press this button.")
---     TBC.ModOptionsConfig.button = options:addButton(
---         "updateSmokableItems", 
---         "Update smokable items list", 
---         "NOTE: You have to be in-game for this option to take effect! If you've not loaded a save, then this will do nothing", 
---         applyModOptions
---     )
--- end
-
--- TBC:initModOptions()
