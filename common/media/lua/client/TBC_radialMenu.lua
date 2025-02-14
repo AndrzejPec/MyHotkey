@@ -2,20 +2,23 @@ require "ISUI/ISRadialMenu"
 require "TimedActions/ISBaseTimedAction"
 require "TimedActions/ISInventoryTransferAction"
 require "TimedActions/ISEatFoodAction"
+require "TBC_Smoking"
 
 TBC = TBC or {}
 
-local lightDialogues = {
-    [1] = getText("IGUI_TBC_light_1"),
-    [2] = getText("IGUI_TBC_light_2"),
-    [3] = getText("IGUI_TBC_light_3"),
-}
-
-local cigarettesDialogues = {
-    [1] = getText("IGUI_TBC_cigarettes_1"),
-    [2] = getText("IGUI_TBC_cigarettes_2"),
-    [3] = getText("IGUI_TBC_cigarettes_3"),
-}
+local function loadDialogues()
+    local options = PZAPI.ModOptions:getOptions("myTobaccoHotkeyMod")
+    cigarettesDialogues = {
+        [1] = options:getOption("TBC_cigarettes_1"):getValue(),
+        [2] = options:getOption("TBC_cigarettes_2"):getValue(),
+        [3] = options:getOption("TBC_cigarettes_3"):getValue(),
+    }
+    lightDialogues = {
+        [1] = options:getOption("TBC_lighter_1"):getValue(),
+        [2] = options:getOption("TBC_lighter_2"):getValue(),
+        [3] = options:getOption("TBC_lighter_3"):getValue(),
+    }
+end
 
 function TBC.handleSmokeCigarette(cigarette)
     local player = getPlayer()
@@ -38,7 +41,7 @@ function TBC.openSmokingRadial()
     local player = getPlayer()
     local inv = player:getInventory()
     if not player then return end
-    local dialogueNo = ZombRand(3) + 1
+    local dialogueNo = ZombRand(#cigarettesDialogues) + 1
 
     -- prevent the radial to appear while...
     -- if player:isSeatedInVehicle() then return end -- in a vehicle
@@ -76,3 +79,5 @@ function TBC.openSmokingRadial()
     --     player:setJoypadIgnoreAimUntilCentered(true)
     -- end
 end
+
+Events.OnGameStart.Add(loadDialogues)

@@ -16,18 +16,18 @@ function TBC:initModOptions()
 
     config.TBC_cigarettes_1 = options:addTextEntry(
         "TBC_cigarettes_1",
-        getText("UI_options_TBC_cigarettes_1_textEntry"),
-        "Dialogue - no cigarettes 1"
+        "Dialogue - no cigarettes 1",
+        getText("UI_options_TBC_cigarettes_1_textEntry")
     )
     config.TBC_cigarettes_2 = options:addTextEntry(
         "TBC_cigarettes_2",
-        getText("UI_options_TBC_cigarettes_2_textEntry"),
-        "Dialogue - no cigarettes 2"
+        "Dialogue - no cigarettes 2",
+        getText("UI_options_TBC_cigarettes_2_textEntry")
     )
     config.TBC_cigarettes_3 = options:addTextEntry(
         "TBC_cigarettes_3",
-        getText("UI_options_TBC_cigarettes_3_textEntry"),
-        "Dialogue - no cigarettes 3"
+        "Dialogue - no cigarettes 3",
+        getText("UI_options_TBC_cigarettes_3_textEntry")
     )
 
     -- No lighter dialogues
@@ -36,18 +36,18 @@ function TBC:initModOptions()
 
     config.TBC_lighter_1 = options:addTextEntry(
         "TBC_lighter_1",
-        getText("UI_options_TBC_lighter_1_textEntry"), -- Zmiana z "light" na "lighter"
-        "Dialogue - no lighter 1"
+        "Dialogue - no lighter 1",
+        getText("UI_options_TBC_lighter_1_textEntry")
     )
     config.TBC_lighter_2 = options:addTextEntry(
         "TBC_lighter_2",
-        getText("UI_options_TBC_lighter_2_textEntry"), -- Zmiana z "light" na "lighter"
-        "Dialogue - no lighter 2"
+        "Dialogue - no lighter 2",
+        getText("UI_options_TBC_lighter_2_textEntry")
     )
     config.TBC_lighter_3 = options:addTextEntry(
         "TBC_lighter_3",
-        getText("UI_options_TBC_lighter_3_textEntry"), -- Zmiana z "light" na "lighter"
-        "Dialogue - no lighter 3"
+        "Dialogue - no lighter 3",
+        getText("UI_options_TBC_lighter_3_textEntry")
     )
 end
 

@@ -1,7 +1,7 @@
-name=[B42] Tobacco Hotkey Mod - dev
+name=[B42] Tobacco Hotkey Mod
 description=Assign hotkey to smoke/chew tobacco.
-poster=poster.png
-id=myTobaccoHotkeyModDev
+poster=preview.png
+id=myTobaccoHotkeyMod
 icon=icon.png
 url=https://github.com/AndrzejPec/MyHotkey
 author=pimatstudio (Andrzej Pec)
