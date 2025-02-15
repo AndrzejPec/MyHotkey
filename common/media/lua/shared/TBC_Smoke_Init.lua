@@ -13,20 +13,18 @@ TBC.fireSources = {
     [4] = "Base.Matchbox",
     [5] = "Base.LighterBBQ",
     [6] = "Base.CandleLit",
-    [7] = "HGO.HGOLighterBBQ"
-    -- [6] = "Base.Lantern_HurricaneLit", -- the game won't let to use this item to light cigarettes
-    -- although I disagree, it's flame after all, but I go with the game's decision
+    [7] = "HGO.HGOLighterBBQ",
 }
 
--- TBC.cigarettes = {
---     [1] = "Base.CigaretteSingle",
---     [2] = "Base.CigaretteRolled",
---     [3] = "Base.Cigar",
---     [4] = "Base.Cigarillo",
---     [5] = "Base.CigaretteSingle_Clove",
---     [6] = "Base.SmokingPipe_Tobacco",
---     [7] = "Base.GlassSmokingPipe_Tobacco", -- this is acutally from the mod Hemp & Tobacco
---     [8] = "Base.CanPipe_Tobacco",
+TBC.cigarettes = {
+    [1] = "Base.CigaretteSingle",
+    [2] = "Base.CigaretteRolled",
+    [3] = "Base.Cigar",
+    [4] = "Base.Cigarillo",
+    [5] = "Base.CigaretteSingle_Clove",
+    [6] = "Base.SmokingPipe_Tobacco",
+    [8] = "Base.CanPipe_Tobacco"
+}
 --     -- Mod Narcotics smokeable items
 --     [9] = "NnC.BluntAK",
 --     [10] = "NnC.BluntNorthernLights",
@@ -96,6 +94,7 @@ TBC.fireSources = {
 --     [72] = "Base.GlassSmokingPipe_Hemp",
 --     [73] = "Base.HempCigarette",
 --     [74] = "Base.SmokingPipe_Hemp",
+    -- [7x] = "Base.GlassSmokingPipe_Tobacco",
 --     -- Mod Cluvius Crack Cigarettes smokeable items
 --     [75] = "CVCrackCigs.CrackCigSingle",
 --     -- Mod ReeferMadness smokeable items
