@@ -131,11 +131,8 @@ function TBC.putSelectedSNUSInLip(snus)
     local player = getPlayer()
     local inv = player:getInventory()
     local snusType = snus and snus:getFullType() or "Unknown"
-    -- print("[DEBUG] Called TBC.putSelectedSNUSInLip")
-    -- print("[DEBUG] Using SNUS: " .. (snus and snus:getName() or "nil"))
 
     if not snus then
-        -- print("[ERROR] SNUS object is nil")
         return
     end
 
@@ -144,20 +141,15 @@ function TBC.putSelectedSNUSInLip(snus)
         ISTimedActionQueue.add(ISInventoryTransferAction:new(player, snus, snus:getContainer(), inv))
     end
 
-    -- print("[DEBUG] SNUS Type: " .. snusType)
-
     if snusType == "Base.TobaccoChewing" or snusType == "Base.HempChewing" then
-        -- print("[DEBUG] Detected Base.TobaccoChewing. Initializing ISTakePillAction.")
         local action = ISTakePillAction:new(player, snus)
         ISTimedActionQueue.add(action)
-        -- print("[DEBUG] Added ISTakePillAction to queue.")
-        -- TBC.TransferItemsBack(snus)
     else
-        -- print("[DEBUG] Detected non-TobaccoChewing SNUS. Calling OnEat_Smokeless.")
         local item = TBC.getFirstItem({snusType}, inv)
         ISInventoryPaneContextMenu.eatItem(item, 1, 0)
-        -- TBC.TransferItemsBack(item)
     end
+
+    TBC.TransferItemBackToContainer(snus, originalContainer)
 end
 
 function TBC.putTobaccoInLip()
