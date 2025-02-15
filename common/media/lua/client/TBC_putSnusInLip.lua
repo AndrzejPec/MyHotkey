@@ -139,6 +139,11 @@ function TBC.putSelectedSNUSInLip(snus)
         return
     end
 
+    if not inv:contains(snus) then
+        print("[DEBUG] Przenoszenie SNUS do głównego ekwipunku...")
+        ISTimedActionQueue.add(ISInventoryTransferAction:new(player, snus, snus:getContainer(), inv))
+    end
+
     -- print("[DEBUG] SNUS Type: " .. snusType)
 
     if snusType == "Base.TobaccoChewing" or snusType == "Base.HempChewing" then
