@@ -1,6 +1,28 @@
 require "TimedActions/ISBaseTimedAction"
 require "TimedActions/ISInventoryTransferAction"
 
+function dawajFajki()
+    local player = getPlayer()
+    local inv = player:getInventory()
+
+    local itemsToAdd = {
+        "Base.Lighter",
+        "Base.CigaretteSingle",
+        "Base.Cigarillo",
+        "Base.Cigar",
+        "Base.CigaretteRolled"
+    }
+
+    for _, itemType in ipairs(itemsToAdd) do
+        for i = 1, 2 do
+            inv:AddItem(itemType)
+        end
+    end
+end
+
+print("[DEBUG] Dodano po 2 sztuki każdego przedmiotu do ekwipunku!")
+
+
 -- function TBC.TransferItemBackToContainer(item, originalContainer)
 --     if not item or not originalContainer then
 --         print("[ERROR] Brak przedmiotu lub oryginalnego kontenera.")

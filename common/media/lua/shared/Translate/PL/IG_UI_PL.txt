@@ -2,5 +2,10 @@ IG_UI_PL = {
     IGUI_TBC_packed_prefix = "Mam ",
     IGUI_TBC_packed_suffix = " paczkę/paczki fajek w ekwipunku. Muszę najpierw ręcznie którąś odpakować.",
 
-    IGUI_TBC_close_modal = "[ ... Anuluj ... ]"
+    IGUI_TBC_close_modal = "[ ... Anuluj ... ]",
+
+    IGUI_TBC_last_one = "ostatnia sztuka",
+    IGUI_TBC_few = "kilka",
+    IGUI_TBC_plenty = "sporo",
+    IGUI_TBC_abundant = "dostatnio",
 }

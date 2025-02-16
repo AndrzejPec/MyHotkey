@@ -3,4 +3,9 @@ IG_UI_EN = {
     IGUI_TBC_packed_suffix = " (different) pack(s) in my inventory. I need to unpack one first.",
 
     IGUI_TBC_close_modal = "[ ... Cancel ... ]",
+
+    IGUI_TBC_last_one = "last one",
+    IGUI_TBC_few = "few",
+    IGUI_TBC_plenty = "plenty",
+    IGUI_TBC_abundant = "abundant",
 }
