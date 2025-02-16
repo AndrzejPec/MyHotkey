@@ -68,6 +68,6 @@ end
 
 TBC:initModOptions()
 
-Events.OnGameStart.Add(function() 
-    TBC:initModOptions()
-end)
+-- Events.OnGameStart.Add(function() 
+--     TBC:initModOptions()
+-- end)
