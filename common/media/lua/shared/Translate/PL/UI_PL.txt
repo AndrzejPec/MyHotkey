@@ -1,14 +1,24 @@
 UI_PL = {
-    UI_optionscreen_binding_tobaccoMod="Tytoń+ Hotkey",
-    UI_optionscreen_binding_putTobaccoInLip="Zażyj snusa (wybór z menu tekstowego)",
-    UI_optionscreen_binding_smokeTobacco="Zapal tytoń (wybór z menu tekstowego)",
-    UI_optionscreen_binding_openSmokingRadial="Zapal tytoń (wybór z menu kołowego)",
+    UI_optionscreen_binding_tobaccoMod="Skrót klawiszowy Tytoń+",
+    UI_optionscreen_binding_putTobaccoInLip="Zażyj tytoń do żucia (wybór z menu tekstowego)",
+    UI_optionscreen_binding_smokeTobacco="Zapal papierosa (wybór z menu tekstowego)",
+    UI_optionscreen_binding_openSmokingRadial="Zapal papierosa (wybór z menu kołowego)",
 
+    UI_options_TBC_no_cigarettes_title = "Brak papierosów - dialogi",
+    UI_options_TBC_no_cigarettes_desc = "Możesz określić linijki tekstu, które wymawia postać, gdy nie masz papierosów w ekwipunku",
     UI_options_TBC_cigarettes_1_textEntry="Dialog nr 1 (otwórz opcje -> mody i wpisz własny tekst!)",
     UI_options_TBC_cigarettes_2_textEntry="Dialog nr 2 (otwórz opcje -> mody i wpisz własny tekst!)",
     UI_options_TBC_cigarettes_3_textEntry="Dialog nr 3 (otwórz opcje -> mody i wpisz własny tekst!)",
 
+    UI_options_TBC_no_lighter_title = "Brak źródła ognia - dialogi",
+    UI_options_TBC_no_lighter_desc = "Możesz określić linijki tekstu, które wymawia postać, gdy nie masz zapalniczki/zapałek w ekwipunku",
     UI_options_TBC_lighter_1_textEntry = "Dialog nr 1 (otwórz opcje -> mody i wpisz własny tekst!)",
     UI_options_TBC_lighter_2_textEntry = "Dialog nr 2 (otwórz opcje -> mody i wpisz własny tekst!)",
     UI_options_TBC_lighter_3_textEntry = "Dialog nr 3 (otwórz opcje -> mody i wpisz własny tekst!)",
+
+    UI_options_TBC_display_mode = "Tryb wyświetlania",
+    UI_options_TBC_display_mode_desc = "Wybierz sposób wyświetlania liczby papierosów w menu modalnym",
+    UI_options_TBC_display_mode_combobox = "Liczba papierosów ma być wyświetlana jako liczba:",
+    UI_options_TBC_display_mode_approximate = "Przybliżona",
+    UI_options_TBC_display_mode_exact = "Dokładna"
 }

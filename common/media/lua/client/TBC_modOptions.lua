@@ -1,18 +1,26 @@
+TBC = TBC or {}  -- Upewnia się, że TBC istnieje
+require("PZAPI")  -- Potem wymagamy PZAPI
+
+
 local config = {
     TBC_cigarettes_1 = nil,
     TBC_cigarettes_2 = nil,
     TBC_cigarettes_3 = nil,
     TBC_lighter_1 = nil,
     TBC_lighter_2 = nil,
-    TBC_lighter_3 = nil
+    TBC_lighter_3 = nil,
+    TBC_display_mode = nil,
 }
+
+print("PZAPI loaded:", PZAPI)
+print(getText("UI_optionscreen_binding_tobaccoMod"))
 
 function TBC:initModOptions()
     local options = PZAPI.ModOptions:create("myTobaccoHotkeyMod", "Tobacco+ Hotkey")
 
     -- No cigarettes dialogues
-    options:addTitle("No cigarettes dialogues")
-    options:addDescription("You can specify your own dialogues for when there are no cigarettes found in the inventory")
+    options:addTitle(getText("UI_options_TBC_no_cigarettes_title"))
+    options:addDescription(getText("UI_options_TBC_no_cigarettes_desc"))
 
     config.TBC_cigarettes_1 = options:addTextEntry(
         "TBC_cigarettes_1",
@@ -31,8 +39,8 @@ function TBC:initModOptions()
     )
 
     -- No lighter dialogues
-    options:addTitle("No lighter dialogues")
-    options:addDescription("You can specify your own dialogues for when there is no lighter found in the inventory")
+    options:addTitle(getText("UI_options_TBC_no_lighter_title"))
+    options:addDescription(getText("UI_options_TBC_no_lighter_desc"))
 
     config.TBC_lighter_1 = options:addTextEntry(
         "TBC_lighter_1",
@@ -49,6 +57,20 @@ function TBC:initModOptions()
         "Dialogue - no lighter 3",
         getText("UI_options_TBC_lighter_3_textEntry")
     )
+
+    options:addSeparator()
+
+    -- Cigarette count display mode
+    options:addTitle(getText("UI_options_TBC_display_mode_title"))
+    options:addDescription(getText("UI_options_TBC_display_mode_desc"))
+
+    config.TBC_display_mode = options:addComboBox("TBC_display_mode", getText("UI_options_TBC_comboBox"))
+    config.TBC_display_mode:addItem(getText("UI_options_TBC_comboBox_1"), true)
+    config.TBC_display_mode:addItem(getText("UI_options_TBC_comboBox_2"), false)
 end
 
 TBC:initModOptions()
+
+-- Events.OnGameStart.Add(function() 
+--     TBC:initModOptions()
+-- end)

@@ -4,11 +4,21 @@ UI_EN = {
     UI_optionscreen_binding_smokeTobacco="Smoke tobacco (text modal menu)",
     UI_optionscreen_binding_openSmokingRadial="Smoke tobacco (radial menu)",
 
+    UI_options_TBC_no_cigarettes_title = "No cigarettes dialogues",
+    UI_options_TBC_no_cigarettes_desc = "You can specify your own dialogues for when there are no cigarettes found in the inventory",
     UI_options_TBC_cigarettes_1_textEntry="First 'no cigarettes dialogue' (open options -> mods and set your own!)",
     UI_options_TBC_cigarettes_2_textEntry="Second 'no cigarettes dialogue' (open options -> mods and set your own!)",
     UI_options_TBC_cigarettes_3_textEntry="Third 'no cigarettes dialogue' (open options -> mods and set your own!)",
 
+    UI_options_TBC_no_lighter_title = "No lighter dialogues",
+    UI_options_TBC_no_lighter_desc = "You can specify your own dialogues for when there is no lighter found in the inventory",
     UI_options_TBC_lighter_1_textEntry = "First 'no lighter dialogue' (open options -> mods and set your own!)",
     UI_options_TBC_lighter_2_textEntry = "Second 'no lighter dialogue' (open options -> mods and set your own!)",
     UI_options_TBC_lighter_3_textEntry = "Third 'no lighter dialogue' (open options -> mods and set your own!)",
+
+    UI_options_TBC_display_mode_title = "Display Mode",
+    UI_options_TBC_display_mode_desc = "Select how the number of cigarettes/chew should be displayed in the modal menu",
+    UI_options_TBC_comboBox = "The number should be:",
+    UI_options_TBC_comboBox_1 = "Approximate",
+    UI_options_TBC_comboBox_2 = "Exact",
 }

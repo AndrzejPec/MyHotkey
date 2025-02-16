@@ -3,6 +3,34 @@ require "TimedActions/ISBaseTimedAction"
 require "TimedActions/ISInventoryTransferAction"
 require "TimedActions/ISEatFoodAction"
 
+-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+-- function ISCraftingUI:onCraftComplete(completedAction, recipe, container, containers)
+--     if not RecipeManager.IsRecipeValid(recipe, self.character, nil, containers) then return end
+--     local items = RecipeManager.getAvailableItemsNeeded(recipe, self.character, containers, nil, nil)
+--     if items:isEmpty() then
+--         self:refresh()
+--         return
+--     end
+--     local previousAction = completedAction
+--     local returnToContainer = {};
+--     if not recipe:isCanBeDoneFromFloor() then
+--         for i=1,items:size() do
+--             local item = items:get(i-1)
+--             if item:getContainer() ~= self.character:getInventory() then
+--                 local action = ISInventoryTransferAction:new(self.character, item, item:getContainer(), self.character:getInventory(), nil)
+--                 ISTimedActionQueue.addAfter(previousAction, action)
+--                 previousAction = action
+--                 table.insert(returnToContainer, item)
+--             end
+--         end
+--     end
+--     local action = ISCraftAction:new(self.character, items:get(0), recipe, container, containers)
+--     action:setOnComplete(ISCraftingUI.onCraftComplete, self, action, recipe, container, containers)
+--     ISTimedActionQueue.addAfter(previousAction, action)
+--     ISCraftingUI.ReturnItemsToOriginalContainer(self.character, returnToContainer)
+-- end
+
+
 local ISEatFoodAction = require("TimedActions/ISEatFoodAction")
 
 local cigarettesDialogues = {}
@@ -28,20 +56,86 @@ end
 
 local CLOSE_BTN_OFFSET = 15
 
+local function countItemsOfType(fullType, inv)
+    local count = 0
+    local items = inv:getItems()
+
+    for i = 0, items:size() - 1 do
+        local item = items:get(i)
+
+        if item:getFullType() == fullType then
+            count = count + (item.getCount and item:getCount() or 1)
+        end
+
+        if item:IsInventoryContainer() then
+            count = count + countItemsOfType(fullType, item:getInventory())
+        end
+    end
+
+    return count
+end
+
+
+local function getItemCountForType(fullType, inv)
+    local count = 0
+    local items = inv:getItems()
+    
+    print("DEBUG: Szukam przedmiotu:", fullType)
+    print("DEBUG: Liczba przedmiotów w ekwipunku:", items:size())
+
+    for i=0, items:size()-1 do
+        local item = items:get(i)
+        print("DEBUG: Sprawdzam przedmiot:", item:getName(), "->", item:getFullType())
+
+        print("Czy som ruwne?" .. item:getFullType() .. " i " .. fullType)
+
+        if item:getFullType() == fullType then
+            if item.getCount then
+                count = count + item:getCount()
+                print("DEBUG: Dodaję ilość z getCount:", item:getCount())
+            else
+                count = count + 1
+                print("DEBUG: Dodaję 1, bo item nie ma getCount")
+            end
+        end
+    end
+
+    print("DEBUG: Znaleziono", count, "sztuk", fullType)
+    return count
+end
+
+
+local function getDisplayCountText(count)
+    local options = PZAPI.ModOptions:getOptions("myTobaccoHotkeyMod")
+    local mode = options:getOption("TBC_display_mode"):getValue()
+
+    if mode == 1 then -- approximate option
+        if count == 1 then
+            return "(" .. getText("IGUI_TBC_last_one") .. ")"
+        elseif count >= 2 and count <= 10 then
+            return "(" .. getText("IGUI_TBC_few") .. ")"
+        elseif count >= 11 and count <= 20 then
+            return "(" .. getText("IGUI_TBC_plenty") .. ")"
+        else
+            return "(" .. getText("IGUI_TBC_abundant") .. ")"
+        end
+    else -- exact
+        return "(" .. count .. ")"
+    end
+end
+
 function TBC.getFirstItem(dictionary, inv, smokingItemType)
     local output
     for i, fullType in pairs(dictionary) do
-        -- print(string.format("[DEBUG] Sprawdzam przedmiot: %s", fullType))
         local identifier = useKey and i or fullType
         output = inv:getFirstTypeRecurse(identifier)
         if output and (smokingItemType ~= "cigarettes" or output.getBaseHunger) then
-            -- print(string.format("[DEBUG] Znaleziono przedmiot: %s", output:getName()))
             break
         else
-            -- print("[DEBUG] Nie znaleziono przedmiotu dla: " .. fullType)
             output = nil
         end
     end
+    
     return output
 end
 
@@ -61,7 +155,6 @@ function MySmokingModal:create()
     local inv = player:getInventory()
     local smokingItemsForModal = TBC.getAllItems(TBC.cigarettes, inv)
     if #smokingItemsForModal == 0 then
-        -- print("[ERROR] Nie znaleziono przedmiotów do palenia.")
         return
     end
 
@@ -72,7 +165,19 @@ function MySmokingModal:create()
     for _, smokingItem in ipairs(smokingItemsForModal) do
         if smokingItem and smokingItem.getName then
             local itemName = smokingItem:getName()
-            local button = ISButton:new(10, yOffset, btnWidth, btnHeight, smokingItem:getName(), self, function(_, _)
+            print("DEBUG: smokingItem:", smokingItem)
+            print("DEBUG: smokingItem:getFullType() dostępne?", smokingItem and smokingItem.getFullType)
+            local itemType = smokingItem:getFullType()
+            if itemType then
+                print("DEBUG: itemType ->", itemType)
+            else
+                print('ni ma itemtype, sorry no')
+            end
+            local count = countItemsOfType(itemType, inv) or 0
+            print('Count for ' .. itemName .. ' is ' .. count)
+            local buttonLabel = itemName .. " " .. getDisplayCountText(count)
+
+            local button = ISButton:new(10, yOffset, btnWidth, btnHeight, buttonLabel, self, function(_, _)
                 MySmokingModal.onOptionSelected(self, smokingItem)
             end)
             
@@ -82,8 +187,6 @@ function MySmokingModal:create()
             self:addChild(button)
     
             yOffset = yOffset + btnHeight + btnSpacing
-        else
-            -- print("[ERROR] Nieprawidłowy obiekt w smokingItemsForModal")
         end
     end
 
@@ -103,25 +206,14 @@ function MySmokingModal:onOptionSelected(smokingItem)
         local fullType = smokingItem:getFullType()
         local item = TBC.getFirstItem({fullType}, inv)
         if item then
-            -- print(string.format("[DEBUG] Wybrano do palenia: %s (Typ: %s)", item:getName(), item:getFullType()))
-            -- Użyj ISInventoryPaneContextMenu.eatItem do rozpoczęcia akcji
-            -- local action = ISInventoryPaneContextMenu.eatItem(item, 1, 0)
-            -- ISTimedActionQueue.add(action)
             ISInventoryPaneContextMenu.eatItem(item, 1, 0)
-            -- print("Rozpoczęto akcję jedzenia wybranego papierosa!")
-        else
-            -- print("[ERROR] Nie udało się znaleźć przedmiotu w inwentarzu na podstawie fullType!")
         end
-    else
-        -- print("[ERROR] Nieprawidłowy przedmiot lub brak metody getFullType!")
     end
 
-    -- isSmokingModalOpen = false
     self:onClose()
 end
 
 function MySmokingModal:onClose()
-    -- isSmokingModalOpen = false
     self:setVisible(false)
     self:removeFromUIManager()
     MySmokingModal.instance = nil
@@ -139,19 +231,10 @@ function MySmokingModal:new(x, y, width, height)
     return o
 end
 
--- local isSmokingModalOpen = false
-
 function OpenMySmokingModal()
-    -- if isSmokingModalOpen then
-    --     print("[DEBUG] Modal jest już otwarty! Nie otwieram kolejnego.")
-    --     return
-    -- end
     if MySmokingModal.instance then
-        -- print("[DEBUG] Modal jest już otwarty! Nie otwieram kolejnego.")
         return
     end
-
-    -- isSmokingModalOpen = true
 
     local screenWidth = getCore():getScreenWidth()
     local screenHeight = getCore():getScreenHeight()
@@ -165,6 +248,22 @@ function OpenMySmokingModal()
     modal:addToUIManager()
 end
 
+-- local function returnFireSourceToContainer(fireSource, player)
+--     local currentContainer = fireSource:getContainer()
+--     local originalContainer = TBC.OriginalContainers[fireSource]
+
+--     print("[DEBUG] function launched!")
+
+--     if fireSource and originalContainer then
+--         print("[DEBUG] Przenoszenie zapalniczki z powrotem do " .. originalContainer:getType())
+--         ISTimedActionQueue.add(ISInventoryTransferAction:new(player, fireSource, player:getInventory(), originalContainer, 10))
+--     else
+--         print("[ERROR] Nie można przenieść zapalniczki - brak przedmiotu lub oryginalnego kontenera!")
+--     end
+
+--     TBC.OriginalContainers[fireSource] = nil
+-- end
+
 TBC.smokeTobacco = function()
     local player = getPlayer()
     local inv = player:getInventory()
@@ -175,7 +274,7 @@ TBC.smokeTobacco = function()
 
     if #availableSmokingItems == 0 then
         if #availableCigarettesPack == 0 then
-            player:Say(cigarettesDialogues[dialogueNo])  -- Używa już wczytanej wartości!
+            player:Say(cigarettesDialogues[dialogueNo])
         else
             player:Say(packedDialogues(#availableCigarettesPack))
         end
@@ -184,9 +283,23 @@ TBC.smokeTobacco = function()
 
     local fireSource = TBC.getFirstItem(TBC.fireSources, inv)
     if not fireSource then
-        player:Say(lightDialogues[dialogueNo])  -- Używa już wczytanej wartości!
+        player:Say(lightDialogues[dialogueNo])
         return
     end
+
+    print('checking firesource cointainer')
+    local originalFireContainer = fireSource:getContainer()
+    -- if not originalFireContainer then
+    --     print("[DEBUG] Zapalniczka jest w inventory postaci.")
+    --     originalFireContainer = inv
+    -- else
+    --     print("[DEBUG] Oryginalny kontener zapalniczki: " .. originalFireContainer:getType())
+    -- end
+
+    TBC.OriginalContainers = TBC.OriginalContainers or {}  -- Jeśli tabela nie istnieje, inicjalizujemy ją!
+    TBC.OriginalContainers[fireSource] = originalFireContainer
+
+    print(TBC.OriginalContainers[fireSource])
 
     if #availableSmokingItems > 1 then
         OpenMySmokingModal()
@@ -195,10 +308,13 @@ TBC.smokeTobacco = function()
         local cigarette = availableSmokingItems[1]
         if cigarette then
             ISInventoryPaneContextMenu.eatItem(cigarette, 1, 0)
+            -- local returnFireSource = ISInventoryTransferAction:new(player, fireSource, player:getInventory(), TBC.OriginalContainers[fireSource], 10)
+            -- print('can return firesource?' .. returnFireSource)
+            -- ISTimedActionQueue.add(returnFireSource)
             return
         end
     else
-        player:Say(cigarettesDialogues[dialogueNo])  -- Używa już wczytanej wartości!
+        player:Say(cigarettesDialogues[dialogueNo])
     end
 end
 
