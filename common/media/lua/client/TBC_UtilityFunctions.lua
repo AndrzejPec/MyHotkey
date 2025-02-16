@@ -1,5 +1,6 @@
 require "TimedActions/ISBaseTimedAction"
 require "TimedActions/ISInventoryTransferAction"
+require "DebugUIs/DebugScenarios"
 
 function dawajFajki()
     local player = getPlayer()
@@ -52,3 +53,12 @@ TBC.getInv = function()
 
     return inv
 end
+
+function TBC.onGameStart()
+    if selectedDebugScenario ~= nil then
+        dawajFajki()
+    end
+end
+
+
+Events.OnGameStart.Add(TBC.onGameStart)

@@ -1,3 +1,5 @@
+require("PZAPI")
+
 local config = {
     TBC_cigarettes_1 = nil,
     TBC_cigarettes_2 = nil,
@@ -5,8 +7,10 @@ local config = {
     TBC_lighter_1 = nil,
     TBC_lighter_2 = nil,
     TBC_lighter_3 = nil,
-    TBC_display_mode = nil
+    TBC_display_mode = nil,
 }
+
+TBC = TBC or {}
 
 function TBC:initModOptions()
     local options = PZAPI.ModOptions:create("myTobaccoHotkeyMod", getText("UI_optionscreen_binding_tobaccoMod"))
@@ -61,3 +65,9 @@ function TBC:initModOptions()
     config.TBC_display_mode:addItem(getText("UI_options_TBC_display_mode_approximate"), true)
     config.TBC_display_mode:addItem(getText("UI_options_TBC_display_mode_exact"), false)
 end
+
+TBC:initModOptions()
+
+Events.OnGameStart.Add(function() 
+    TBC:initModOptions()
+end)
