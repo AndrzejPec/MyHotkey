@@ -56,24 +56,54 @@ end
 
 local CLOSE_BTN_OFFSET = 15
 
+local function countItemsOfType(fullType, inv)
+    local count = 0
+    local items = inv:getItems()
+
+    for i = 0, items:size() - 1 do
+        local item = items:get(i)
+
+        if item:getFullType() == fullType then
+            count = count + (item.getCount and item:getCount() or 1)
+        end
+
+        if item:IsInventoryContainer() then
+            count = count + countItemsOfType(fullType, item:getInventory())
+        end
+    end
+
+    return count
+end
+
+
 local function getItemCountForType(fullType, inv)
     local count = 0
-    for i=0, inv:getItems():size()-1 do
-        local item = inv:getItems():get(i)
+    local items = inv:getItems()
+    
+    print("DEBUG: Szukam przedmiotu:", fullType)
+    print("DEBUG: Liczba przedmiotów w ekwipunku:", items:size())
+
+    for i=0, items:size()-1 do
+        local item = items:get(i)
+        print("DEBUG: Sprawdzam przedmiot:", item:getName(), "->", item:getFullType())
+
+        print("Czy som ruwne?" .. item:getFullType() .. " i " .. fullType)
+
         if item:getFullType() == fullType then
             if item.getCount then
                 count = count + item:getCount()
-                print('Getcount jednak jest')
+                print("DEBUG: Dodaję ilość z getCount:", item:getCount())
             else
                 count = count + 1
-                print('Getcounta jednak ni ma, ale dodalem jeden bo jestem downem')
+                print("DEBUG: Dodaję 1, bo item nie ma getCount")
             end
         end
     end
 
-    -- print('pszedmiotuw ' .. fullType .. ' je ' .. count)
+    print("DEBUG: Znaleziono", count, "sztuk", fullType)
     return count
 end
+
 
 local function getDisplayCountText(count)
     local options = PZAPI.ModOptions:getOptions("myTobaccoHotkeyMod")
@@ -143,7 +173,8 @@ function MySmokingModal:create()
             else
                 print('ni ma itemtype, sorry no')
             end
-            local count = getItemCountForType(itemType, inv) or 0
+            local count = countItemsOfType(itemType, inv) or 0
+            print('Count for ' .. itemName .. ' is ' .. count)
             local buttonLabel = itemName .. " " .. getDisplayCountText(count)
 
             local button = ISButton:new(10, yOffset, btnWidth, btnHeight, buttonLabel, self, function(_, _)

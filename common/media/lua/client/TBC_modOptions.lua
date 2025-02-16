@@ -1,4 +1,6 @@
-require("PZAPI")
+TBC = TBC or {}  -- Upewnia się, że TBC istnieje
+require("PZAPI")  -- Potem wymagamy PZAPI
+
 
 local config = {
     TBC_cigarettes_1 = nil,
@@ -10,10 +12,11 @@ local config = {
     TBC_display_mode = nil,
 }
 
-TBC = TBC or {}
+print("PZAPI loaded:", PZAPI)
+print(getText("UI_optionscreen_binding_tobaccoMod"))
 
 function TBC:initModOptions()
-    local options = PZAPI.ModOptions:create("myTobaccoHotkeyMod", getText("UI_optionscreen_binding_tobaccoMod"))
+    local options = PZAPI.ModOptions:create("myTobaccoHotkeyMod", "Tobacco+ Hotkey")
 
     -- No cigarettes dialogues
     options:addTitle(getText("UI_options_TBC_no_cigarettes_title"))
@@ -58,12 +61,12 @@ function TBC:initModOptions()
     options:addSeparator()
 
     -- Cigarette count display mode
-    options:addTitle(getText("UI_options_TBC_display_mode"))
+    options:addTitle(getText("UI_options_TBC_display_mode_title"))
     options:addDescription(getText("UI_options_TBC_display_mode_desc"))
 
-    config.TBC_display_mode = options:addComboBox("TBC_display_mode", getText("UI_options_TBC_display_mode"), getText("UI_options_TBC_display_mode_combobox"))
-    config.TBC_display_mode:addItem(getText("UI_options_TBC_display_mode_approximate"), true)
-    config.TBC_display_mode:addItem(getText("UI_options_TBC_display_mode_exact"), false)
+    config.TBC_display_mode = options:addComboBox("TBC_display_mode", getText("UI_options_TBC_comboBox"))
+    config.TBC_display_mode:addItem(getText("UI_options_TBC_comboBox_1"), true)
+    config.TBC_display_mode:addItem(getText("UI_options_TBC_comboBox_2"), false)
 end
 
 TBC:initModOptions()

@@ -16,9 +16,9 @@ UI_EN = {
     UI_options_TBC_lighter_2_textEntry = "Second 'no lighter dialogue' (open options -> mods and set your own!)",
     UI_options_TBC_lighter_3_textEntry = "Third 'no lighter dialogue' (open options -> mods and set your own!)",
 
-    UI_options_TBC_display_mode = "Display Mode",
+    UI_options_TBC_display_mode_title = "Display Mode",
     UI_options_TBC_display_mode_desc = "Select how the number of cigarettes/chew should be displayed in the modal menu",
-    UI_options_TBC_display_mode_combobox = "The number should be:",
-    UI_options_TBC_display_mode_approximate = "Approximate",
-    UI_options_TBC_display_mode_exact = "Exact",
+    UI_options_TBC_comboBox = "The number should be:",
+    UI_options_TBC_comboBox_1 = "Approximate",
+    UI_options_TBC_comboBox_2 = "Exact",
 }
